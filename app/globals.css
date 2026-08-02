@@ -1,0 +1,758 @@
+:root {
+  --black: #070604;
+  --black-soft: #100d09;
+  --black-warm: #17110b;
+  --paper: #f3ead8;
+  --paper-dim: #cfc0a5;
+  --muted: #a99878;
+  --gold: #d3a44f;
+  --gold-soft: #b98936;
+  --bronze: #77552b;
+  --line: rgba(211, 164, 79, 0.24);
+  --line-soft: rgba(243, 234, 216, 0.13);
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(211, 164, 79, 0.14), transparent 24%),
+    linear-gradient(180deg, var(--black) 0%, #0d0906 48%, var(--black) 100%);
+  color: var(--paper);
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+}
+
+main {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.topbar {
+  align-items: center;
+  background: rgba(7, 6, 4, 0.72);
+  border-bottom: 1px solid var(--line-soft);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: auto 1fr auto;
+  left: 0;
+  padding: 16px clamp(16px, 4vw, 58px);
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
+}
+
+.brand,
+.headerActions,
+.heroActions,
+.kicker,
+.eyebrow,
+.trustStrip span {
+  align-items: center;
+  display: flex;
+}
+
+.brand {
+  gap: 11px;
+  font-size: 21px;
+  font-weight: 850;
+  min-width: 0;
+}
+
+.brandMark {
+  background: linear-gradient(145deg, var(--gold), #8d6226);
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(211, 164, 79, 0.12);
+  color: var(--black);
+  display: grid;
+  height: 36px;
+  place-items: center;
+  width: 36px;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(14px, 2.5vw, 34px);
+  justify-content: center;
+}
+
+.nav a {
+  color: rgba(243, 234, 216, 0.72);
+  font-size: 14px;
+  font-weight: 720;
+}
+
+.nav a:hover,
+.sectionHead a:hover {
+  color: var(--gold);
+}
+
+.headerActions {
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.iconButton,
+.primaryButton,
+.primaryLink,
+.secondaryLink {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+.iconButton {
+  background: rgba(243, 234, 216, 0.06);
+  display: grid;
+  place-items: center;
+  width: 44px;
+}
+
+.primaryButton,
+.primaryLink {
+  align-items: center;
+  background: linear-gradient(145deg, var(--gold), var(--gold-soft));
+  color: var(--black);
+  display: inline-flex;
+  font-weight: 880;
+  gap: 8px;
+  padding: 0 18px;
+}
+
+.secondaryLink {
+  align-items: center;
+  background: rgba(7, 6, 4, 0.3);
+  color: var(--paper);
+  display: inline-flex;
+  font-weight: 820;
+  padding: 0 18px;
+}
+
+.hero {
+  background-image:
+    linear-gradient(90deg, rgba(7, 6, 4, 0.96), rgba(7, 6, 4, 0.7) 48%, rgba(7, 6, 4, 0.9)),
+    linear-gradient(180deg, rgba(7, 6, 4, 0.14), var(--black) 98%),
+    url("/cinematic-hero.png");
+  background-position: center;
+  background-size: cover;
+  display: grid;
+  gap: clamp(28px, 4vw, 70px);
+  grid-template-columns: minmax(0, 1.02fr) minmax(330px, 0.72fr);
+  min-height: calc(100vh - 76px);
+  padding: clamp(42px, 7vw, 96px) clamp(16px, 4vw, 58px) 54px;
+  position: relative;
+}
+
+.hero::before {
+  background:
+    linear-gradient(90deg, rgba(211, 164, 79, 0.18), transparent 38%),
+    linear-gradient(180deg, transparent 0%, rgba(7, 6, 4, 0.84) 100%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.hero::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(211, 164, 79, 0.5), transparent),
+    repeating-linear-gradient(
+      90deg,
+      rgba(243, 234, 216, 0.06) 0 1px,
+      transparent 1px 96px
+    );
+  content: "";
+  height: 1px;
+  left: clamp(16px, 4vw, 58px);
+  opacity: 0.8;
+  pointer-events: none;
+  position: absolute;
+  right: clamp(16px, 4vw, 58px);
+  top: 50%;
+}
+
+.heroCopy,
+.heroPanel {
+  position: relative;
+  z-index: 1;
+}
+
+.heroCopy {
+  align-self: center;
+  max-width: 940px;
+}
+
+.eyebrow,
+.kicker {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(60px, 9.6vw, 136px);
+  font-weight: 760;
+  line-height: 0.86;
+  margin-top: 20px;
+  max-width: 1000px;
+  text-wrap: balance;
+}
+
+.hero p {
+  color: rgba(243, 234, 216, 0.82);
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.5;
+  margin-top: 26px;
+  max-width: 760px;
+}
+
+.heroActions {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.heroPanel {
+  align-self: center;
+  background: rgba(12, 9, 6, 0.74);
+  border: 1px solid rgba(211, 164, 79, 0.34);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  color: var(--paper);
+  padding: 18px;
+  backdrop-filter: blur(16px);
+}
+
+.liveHeader {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.liveHeader span {
+  background: rgba(158, 47, 38, 0.22);
+  border-radius: 999px;
+  color: #f1b3a5;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 7px 11px;
+  text-transform: uppercase;
+}
+
+.featureLot {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 150px 1fr;
+}
+
+.featureArt,
+.productVisual,
+.lotVisual {
+  align-items: end;
+  border-radius: 8px;
+  display: flex;
+  min-height: 190px;
+  overflow: hidden;
+  padding: 15px;
+  position: relative;
+}
+
+.featureArt {
+  background-image:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.78)),
+    url("/lot-costume.png");
+  background-position: center;
+  background-size: cover;
+  color: var(--paper);
+  min-height: 180px;
+}
+
+.featureArt::before,
+.productVisual::before,
+.lotVisual::before {
+  border: 1px solid rgba(211, 164, 79, 0.38);
+  content: "";
+  inset: 12px;
+  pointer-events: none;
+  position: absolute;
+}
+
+.featureArt::after,
+.productVisual::after,
+.lotVisual::after {
+  background: linear-gradient(90deg, transparent, rgba(211, 164, 79, 0.52), transparent);
+  content: "";
+  height: 1px;
+  left: 15px;
+  position: absolute;
+  right: 15px;
+  top: 22px;
+}
+
+.featureArt span,
+.productVisual span {
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.featureLot p,
+.cardBody p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.featureLot strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 38px;
+  margin: 8px 0;
+}
+
+.featureLot small {
+  color: var(--muted);
+}
+
+.trustStrip {
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
+.trustStrip span {
+  color: var(--paper-dim);
+  font-size: 13px;
+  gap: 6px;
+}
+
+.statusGrid {
+  background: #0c0906;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: -20px clamp(16px, 4vw, 58px) 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.statusGrid div {
+  background: rgba(243, 234, 216, 0.045);
+  padding: 20px;
+}
+
+.statusGrid span {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.statusGrid strong {
+  color: var(--paper);
+  font-size: 21px;
+}
+
+.section,
+.sellerSection {
+  padding: clamp(54px, 8vw, 104px) clamp(16px, 4vw, 58px);
+}
+
+.section {
+  background: var(--black);
+  border-top: 1px solid rgba(211, 164, 79, 0.12);
+  color: var(--paper);
+}
+
+.shopSection {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(211, 164, 79, 0.14), transparent 28%),
+    linear-gradient(180deg, #0d0906, var(--black));
+}
+
+.auctionSection {
+  background:
+    linear-gradient(180deg, var(--black), #0f0a06 42%, var(--black));
+}
+
+.sectionHead {
+  align-items: end;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.sectionHead h2,
+.sellerCopy h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 4.5vw, 58px);
+  font-weight: 720;
+  line-height: 0.98;
+  margin-top: 10px;
+  max-width: 900px;
+  text-wrap: balance;
+}
+
+.sectionHead a {
+  color: var(--gold);
+  font-weight: 880;
+}
+
+.cards,
+.serviceGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.productGrid,
+.lotGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.productCard,
+.lotCard {
+  background: rgba(243, 234, 216, 0.045);
+  border: 1px solid rgba(211, 164, 79, 0.22);
+  border-radius: 8px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+}
+
+.productVisual {
+  color: var(--paper);
+}
+
+.productVisual.cinematic {
+  min-height: 230px;
+}
+
+.productVisual.emerald {
+  background:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.76)),
+    radial-gradient(circle at 70% 18%, rgba(211, 164, 79, 0.35), transparent 30%),
+    #1d463d;
+}
+
+.productVisual.amber {
+  background:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.76)),
+    radial-gradient(circle at 72% 18%, rgba(211, 164, 79, 0.38), transparent 30%),
+    #7d5725;
+}
+
+.productVisual.rose {
+  background:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.76)),
+    radial-gradient(circle at 72% 18%, rgba(211, 164, 79, 0.28), transparent 30%),
+    #64231d;
+}
+
+.cardBody {
+  padding: 20px;
+}
+
+.cardBody h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  line-height: 1.05;
+  margin: 8px 0 16px;
+}
+
+.cardBody strong {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.serviceBand {
+  background:
+    linear-gradient(90deg, rgba(7, 6, 4, 0.95), rgba(7, 6, 4, 0.7)),
+    radial-gradient(circle at 18% 18%, rgba(211, 164, 79, 0.2), transparent 34%),
+    #0b0805;
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  color: var(--paper);
+}
+
+.serviceGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.serviceItem {
+  align-items: start;
+  background: rgba(243, 234, 216, 0.045);
+  border: 1px solid rgba(211, 164, 79, 0.2);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 34px 1fr;
+  padding: 22px;
+}
+
+.starService {
+  min-height: 180px;
+}
+
+.serviceItem svg {
+  color: var(--gold);
+}
+
+.serviceItem strong {
+  color: var(--gold);
+  grid-column: 2;
+}
+
+.serviceItem p {
+  color: var(--paper-dim);
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
+.lotVisual {
+  align-items: center;
+  color: var(--paper);
+  justify-content: center;
+}
+
+.photoLot {
+  background-position: center;
+  background-size: cover;
+  min-height: 300px;
+}
+
+.photoLot svg {
+  background: rgba(7, 6, 4, 0.62);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.photoLot.ink {
+  background-image:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.72)),
+    url("/lot-costume.png");
+}
+
+.photoLot.blue {
+  background-image:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.72)),
+    url("/lot-studio.png");
+}
+
+.photoLot.violet {
+  background-image:
+    linear-gradient(180deg, transparent, rgba(7, 6, 4, 0.72)),
+    url("/lot-book.png");
+}
+
+dl {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+}
+
+dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+dd {
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 850;
+  margin: 3px 0 0;
+}
+
+.sellerSection {
+  background:
+    linear-gradient(90deg, rgba(7, 6, 4, 0.96), rgba(7, 6, 4, 0.72)),
+    linear-gradient(135deg, #21150d, #070604 68%);
+  border-top: 1px solid var(--line);
+  color: var(--paper);
+  display: grid;
+  gap: 32px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.8fr);
+}
+
+.sellerCopy p {
+  color: var(--paper-dim);
+  line-height: 1.6;
+  margin-top: 18px;
+  max-width: 700px;
+}
+
+.steps {
+  counter-reset: step;
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps li {
+  background: rgba(243, 234, 216, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 66px;
+  padding: 18px 18px 18px 58px;
+  position: relative;
+}
+
+.steps li::before {
+  background: linear-gradient(145deg, var(--gold), var(--gold-soft));
+  border-radius: 50%;
+  color: var(--black);
+  content: counter(step);
+  counter-increment: step;
+  display: grid;
+  font-weight: 950;
+  height: 28px;
+  left: 18px;
+  place-items: center;
+  position: absolute;
+  top: 18px;
+  width: 28px;
+}
+
+@media (max-width: 920px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .nav {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .hero,
+  .sellerSection {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    background-position: 58% center;
+    min-height: auto;
+  }
+
+  .productGrid,
+  .lotGrid,
+  .serviceGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .brand {
+    font-size: 18px;
+  }
+
+  .primaryButton {
+    font-size: 0;
+    padding: 0 12px;
+  }
+
+  .primaryButton svg {
+    margin: 0;
+  }
+
+  .hero {
+    background-image:
+      linear-gradient(180deg, rgba(7, 6, 4, 0.78), rgba(7, 6, 4, 0.92) 58%, var(--black)),
+      url("/cinematic-hero.png");
+    background-position: 64% top;
+    padding-top: 34px;
+  }
+
+  .hero::after {
+    top: 38%;
+  }
+
+  h1 {
+    font-size: 56px;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  .featureLot {
+    grid-template-columns: 1fr;
+  }
+
+  .featureArt {
+    min-height: 210px;
+  }
+
+  .statusGrid,
+  .productGrid,
+  .lotGrid,
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHead {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .productVisual,
+  .lotVisual {
+    min-height: 220px;
+  }
+
+  .photoLot {
+    min-height: 240px;
+  }
+
+  dl {
+    grid-template-columns: 1fr;
+  }
+}
