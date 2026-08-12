@@ -269,6 +269,22 @@ h1 {
 .heroPanel {
   align-self: center;
   padding: var(--card-padding);
+  position: relative;
+}
+
+.heroPanelLabel {
+  background: var(--color-snow);
+  color: #ef3b32;
+  font-size: clamp(22px, 2.6vw, 32px);
+  font-weight: 700;
+  left: 50%;
+  line-height: 1;
+  padding: 0 14px;
+  position: absolute;
+  text-transform: lowercase;
+  top: -18px;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .liveHeader {

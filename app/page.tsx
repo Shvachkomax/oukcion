@@ -144,6 +144,7 @@ export default function Home() {
         </div>
 
         <aside className="heroPanel" aria-label="Сводка торгов">
+          <div className="heroPanelLabel">аукцион дня</div>
           <div className="liveHeader">
             <span>Live</span>
             <strong>24 активных лота</strong>
