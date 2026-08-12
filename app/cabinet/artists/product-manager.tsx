@@ -162,6 +162,10 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
     loadProduct("");
   }
 
+  function formatRub(value: number | null | undefined) {
+    return Number(value || 0).toLocaleString("ru-RU");
+  }
+
   return (
     <>
       <form action={formAction} className="cabinetForm productForm" ref={formRef}>
@@ -376,8 +380,8 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
                 </div>
                 <p>{product.description}</p>
                 <small>
-                  {product.category} · {product.price_rub.toLocaleString("ru-RU")} ₽ ·{" "}
-                  {product.quantity} шт.
+                  {product.category} · {formatRub(product.price_rub)} ₽ ·{" "}
+                  {Number(product.quantity || 0)} шт.
                 </small>
                 <div className="rowActions">
                   <button
