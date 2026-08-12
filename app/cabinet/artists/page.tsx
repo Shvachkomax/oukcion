@@ -63,10 +63,8 @@ export default async function CabinetArtistsPage({
     );
   }
 
-  const [artists, products] = await Promise.all([
-    getCabinetArtists(),
-    getCabinetProducts()
-  ]);
+  const artists = await getCabinetArtists();
+  const products = await getCabinetProducts();
 
   return (
     <main className="cabinetPage">

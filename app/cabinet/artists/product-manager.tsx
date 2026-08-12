@@ -2,13 +2,11 @@
 
 import {
   ChangeEvent,
-  useEffect,
   useMemo,
   useRef,
   useState,
   useActionState
 } from "react";
-import { useRouter } from "next/navigation";
 import { PackagePlus } from "lucide-react";
 import type { Artist, PhysicalProduct, ProductFormState } from "@/lib/artists";
 import { deletePhysicalProduct, savePhysicalProduct } from "./actions";
@@ -94,7 +92,6 @@ type ProductManagerProps = {
 };
 
 export function ProductManager({ artists, products }: ProductManagerProps) {
-  const router = useRouter();
   const [state, formAction, pending] = useActionState(
     savePhysicalProduct,
     initialState
@@ -107,12 +104,6 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
     () => new Map(products.map((product) => [product.slug, product])),
     [products]
   );
-
-  useEffect(() => {
-    if (state.ok) {
-      router.refresh();
-    }
-  }, [router, state.ok, state.message]);
 
   function loadProduct(slug: string) {
     setSelectedProduct(slug);

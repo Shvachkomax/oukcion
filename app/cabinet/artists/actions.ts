@@ -239,100 +239,112 @@ export async function savePhysicalProduct(
   _previousState: ProductFormState,
   formData: FormData
 ): Promise<ProductFormState> {
-  if (!(await isCabinetAllowed())) {
+  try {
+    if (!(await isCabinetAllowed())) {
+      return {
+        message: "Сначала введите код доступа.",
+        ok: false
+      };
+    }
+
+    if (!supabaseAdmin) {
+      return {
+        message: "Не настроен SUPABASE_SERVICE_ROLE_KEY для сохранения.",
+        ok: false
+      };
+    }
+
+    const artistValue = getString(formData, "artist");
+    const [artistSlug, ...artistNameParts] = artistValue.split("|");
+    const artistName = artistNameParts.join("|");
+    const title = getString(formData, "title");
+    const category = getString(formData, "category");
+    const description = getString(formData, "description");
+    const provenance = getString(formData, "provenance");
+    const rawSlug = getString(formData, "slug");
+    const slug = slugify(rawSlug || `${artistSlug}-${title}`);
+
+    if (
+      !artistSlug ||
+      !artistName ||
+      !title ||
+      !category ||
+      !description ||
+      !provenance ||
+      !slug
+    ) {
+      return {
+        message:
+          "Выберите артиста и заполните название, категорию, описание и происхождение товара.",
+        ok: false
+      };
+    }
+
+    const productImage = await uploadImage(
+      formData,
+      "image_file",
+      "products",
+      slug
+    );
+
+    if (productImage.error) {
+      return {
+        message: productImage.error,
+        ok: false
+      };
+    }
+
+    const { error } = await supabaseAdmin.from("physical_products").upsert(
+      {
+        artist_name: artistName,
+        artist_slug: artistSlug,
+        category,
+        condition: getString(formData, "condition") || "не указано",
+        delivery: getString(formData, "delivery") || "доставка обсуждается",
+        description,
+        image_url:
+          productImage.publicUrl ||
+          getString(formData, "existing_image_url") ||
+          null,
+        price_rub: getNumber(formData, "price_rub"),
+        product_type: "physical",
+        provenance,
+        quantity: getNumber(formData, "quantity") || 1,
+        slug,
+        status: getString(formData, "status") || "draft",
+        title,
+        updated_at: new Date().toISOString()
+      },
+      {
+        onConflict: "slug"
+      }
+    );
+
+    if (error) {
+      console.error("Physical product save failed", error);
+      return {
+        message: `Не удалось сохранить товар: ${error.message}`,
+        ok: false
+      };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/cabinet/artists");
+
     return {
-      message: "Сначала введите код доступа.",
-      ok: false
+      message: "Физический товар сохранён. Обновите страницу, чтобы увидеть его в списке.",
+      ok: true
     };
-  }
-
-  if (!supabaseAdmin) {
-    return {
-      message: "Не настроен SUPABASE_SERVICE_ROLE_KEY для сохранения.",
-      ok: false
-    };
-  }
-
-  const artistValue = getString(formData, "artist");
-  const [artistSlug, ...artistNameParts] = artistValue.split("|");
-  const artistName = artistNameParts.join("|");
-  const title = getString(formData, "title");
-  const category = getString(formData, "category");
-  const description = getString(formData, "description");
-  const provenance = getString(formData, "provenance");
-  const rawSlug = getString(formData, "slug");
-  const slug = slugify(rawSlug || `${artistSlug}-${title}`);
-
-  if (
-    !artistSlug ||
-    !artistName ||
-    !title ||
-    !category ||
-    !description ||
-    !provenance ||
-    !slug
-  ) {
+  } catch (error) {
+    console.error("Physical product save crashed", error);
     return {
       message:
-        "Выберите артиста и заполните название, категорию, описание и происхождение товара.",
+        error instanceof Error
+          ? `Ошибка сохранения товара: ${error.message}`
+          : "Ошибка сохранения товара.",
       ok: false
     };
   }
-
-  const productImage = await uploadImage(
-    formData,
-    "image_file",
-    "products",
-    slug
-  );
-
-  if (productImage.error) {
-    return {
-      message: productImage.error,
-      ok: false
-    };
-  }
-
-  const { error } = await supabaseAdmin.from("physical_products").upsert(
-    {
-      artist_name: artistName,
-      artist_slug: artistSlug,
-      category,
-      condition: getString(formData, "condition") || "не указано",
-      delivery: getString(formData, "delivery") || "доставка обсуждается",
-      description,
-      image_url:
-        productImage.publicUrl ||
-        getString(formData, "existing_image_url") ||
-        null,
-      price_rub: getNumber(formData, "price_rub"),
-      product_type: "physical",
-      provenance,
-      quantity: getNumber(formData, "quantity") || 1,
-      slug,
-      status: getString(formData, "status") || "draft",
-      title,
-      updated_at: new Date().toISOString()
-    },
-    {
-      onConflict: "slug"
-    }
-  );
-
-  if (error) {
-    return {
-      message: `Не удалось сохранить товар: ${error.message}`,
-      ok: false
-    };
-  }
-
-  revalidatePath("/");
-  revalidatePath("/cabinet/artists");
-
-  return {
-    message: "Физический товар сохранён.",
-    ok: true
-  };
 }
 
 export async function deleteArtist(formData: FormData) {
