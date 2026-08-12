@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowLeft, BadgeCheck, LockKeyhole } from "lucide-react";
-import { getCabinetArtists } from "@/lib/artists";
+import { ArrowLeft, BadgeCheck, LockKeyhole, PackagePlus } from "lucide-react";
+import { getCabinetArtists, getCabinetProducts } from "@/lib/artists";
 import { ArtistForm } from "./artist-form";
+import { ProductForm } from "./product-form";
 import { isCabinetAllowed, loginToCabinet } from "./actions";
 
 type CabinetPageProps = {
@@ -61,7 +62,10 @@ export default async function CabinetArtistsPage({
     );
   }
 
-  const artists = await getCabinetArtists();
+  const [artists, products] = await Promise.all([
+    getCabinetArtists(),
+    getCabinetProducts()
+  ]);
 
   return (
     <main className="cabinetPage">
@@ -82,6 +86,30 @@ export default async function CabinetArtistsPage({
         </div>
 
         <ArtistForm />
+
+        <div className="cabinetPanel">
+          <div className="cabinetPanelHead">
+            <div>
+              <span className="kicker">
+                <PackagePlus size={15} /> товары артиста
+              </span>
+              <h2>Физический товар</h2>
+              <p>
+                Добавьте предмет, который принадлежит артисту или связан с его
+                творческой историей. Товар сохраняется отдельно и привязывается
+                к выбранной карточке артиста.
+              </p>
+            </div>
+          </div>
+          {artists.length > 0 ? (
+            <ProductForm artists={artists} />
+          ) : (
+            <p className="emptyState">
+              Сначала сохраните карточку артиста, затем можно будет добавить
+              физический товар.
+            </p>
+          )}
+        </div>
 
         <div className="cabinetList">
           <h2>Сохранённые карточки</h2>
@@ -107,6 +135,31 @@ export default async function CabinetArtistsPage({
             </div>
           ) : (
             <p className="emptyState">Пока нет сохранённых карточек.</p>
+          )}
+        </div>
+
+        <div className="cabinetList">
+          <h2>Физические товары</h2>
+          {products.length > 0 ? (
+            <div className="cabinetRows">
+              {products.map((product) => (
+                <article key={product.id}>
+                  <div>
+                    <strong>{product.title}</strong>
+                    <span>
+                      {product.artist_name} · {product.status}
+                    </span>
+                  </div>
+                  <p>{product.description}</p>
+                  <small>
+                    {product.category} · {product.price_rub.toLocaleString("ru-RU")} ₽ ·{" "}
+                    {product.quantity} шт.
+                  </small>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="emptyState">Пока нет физических товаров.</p>
           )}
         </div>
       </section>

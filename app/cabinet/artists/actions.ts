@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { ArtistFormState } from "@/lib/artists";
+import type { ArtistFormState, ProductFormState } from "@/lib/artists";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 const accessCookieName = "oukcion_cabinet_access";
@@ -108,7 +108,7 @@ export async function saveArtist(
       image_url: getString(formData, "image_url") || null,
       name,
       services_count: getNumber(formData, "services_count"),
-      shop_items_count: getNumber(formData, "shop_items_count"),
+      shop_items_count: 0,
       slug,
       sort_order: getNumber(formData, "sort_order") || 100,
       updated_at: new Date().toISOString(),
@@ -131,6 +131,89 @@ export async function saveArtist(
 
   return {
     message: "Карточка артиста сохранена.",
+    ok: true
+  };
+}
+
+export async function savePhysicalProduct(
+  _previousState: ProductFormState,
+  formData: FormData
+): Promise<ProductFormState> {
+  if (!(await isCabinetAllowed())) {
+    return {
+      message: "Сначала введите код доступа.",
+      ok: false
+    };
+  }
+
+  if (!supabaseAdmin) {
+    return {
+      message: "Не настроен SUPABASE_SERVICE_ROLE_KEY для сохранения.",
+      ok: false
+    };
+  }
+
+  const artistValue = getString(formData, "artist");
+  const [artistSlug, ...artistNameParts] = artistValue.split("|");
+  const artistName = artistNameParts.join("|");
+  const title = getString(formData, "title");
+  const category = getString(formData, "category");
+  const description = getString(formData, "description");
+  const provenance = getString(formData, "provenance");
+  const rawSlug = getString(formData, "slug");
+  const slug = slugify(rawSlug || `${artistSlug}-${title}`);
+
+  if (
+    !artistSlug ||
+    !artistName ||
+    !title ||
+    !category ||
+    !description ||
+    !provenance ||
+    !slug
+  ) {
+    return {
+      message:
+        "Выберите артиста и заполните название, категорию, описание и происхождение товара.",
+      ok: false
+    };
+  }
+
+  const { error } = await supabaseAdmin.from("physical_products").upsert(
+    {
+      artist_name: artistName,
+      artist_slug: artistSlug,
+      category,
+      condition: getString(formData, "condition") || "не указано",
+      delivery: getString(formData, "delivery") || "доставка обсуждается",
+      description,
+      image_url: getString(formData, "image_url") || null,
+      price_rub: getNumber(formData, "price_rub"),
+      product_type: "physical",
+      provenance,
+      quantity: getNumber(formData, "quantity") || 1,
+      slug,
+      status: getString(formData, "status") || "draft",
+      title,
+      updated_at: new Date().toISOString()
+    },
+    {
+      onConflict: "slug"
+    }
+  );
+
+  if (error) {
+    return {
+      message: `Не удалось сохранить товар: ${error.message}`,
+      ok: false
+    };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/cabinet/artists");
+
+  return {
+    message: "Физический товар сохранён.",
     ok: true
   };
 }

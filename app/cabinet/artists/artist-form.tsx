@@ -54,15 +54,6 @@ export function ArtistForm() {
 
       <div className="formGrid counters">
         <label>
-          Товары
-          <input
-            min="0"
-            name="shop_items_count"
-            placeholder="0"
-            type="number"
-          />
-        </label>
-        <label>
           Лоты
           <input min="0" name="auction_lots_count" type="number" />
         </label>
