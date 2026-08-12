@@ -257,6 +257,7 @@ h1 {
 }
 
 .heroPanel,
+.artistCard,
 .productCard,
 .lotCard,
 .sellerSection,
@@ -451,19 +452,113 @@ h1 {
 }
 
 .cards,
+.artistGrid,
 .serviceGrid {
   display: grid;
   gap: 16px;
 }
 
+.artistGrid,
 .productGrid,
 .lotGrid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.artistCard,
 .productCard,
 .lotCard {
   overflow: hidden;
+}
+
+.artistPortrait {
+  background-position: center;
+  background-size: cover;
+  border-radius: 0 0 28px 28px;
+  min-height: 310px;
+  position: relative;
+}
+
+.artistPortrait::after {
+  background: linear-gradient(
+    180deg,
+    rgba(9, 9, 11, 0) 45%,
+    rgba(9, 9, 11, 0.56) 100%
+  );
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.artistPortrait span {
+  background: var(--color-obsidian);
+  border-radius: var(--radius-badges);
+  bottom: 16px;
+  color: var(--color-snow);
+  font-size: 12px;
+  font-weight: 600;
+  left: 16px;
+  line-height: 1;
+  padding: 6px 9px;
+  position: absolute;
+  z-index: 1;
+}
+
+.artistBody {
+  padding: var(--card-padding);
+}
+
+.artistMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.artistMeta span {
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-badges);
+  color: var(--color-iron);
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px 8px;
+}
+
+.artistBody h3 {
+  color: var(--color-obsidian);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.artistBody p {
+  color: var(--color-steel);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.artistStats {
+  border-top: 1px solid var(--color-cloud);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+.artistStats span {
+  color: var(--color-fog);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.artistStats strong {
+  color: var(--color-obsidian);
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  margin-bottom: 4px;
 }
 
 .productVisual {
@@ -688,6 +783,7 @@ dd {
     padding-top: 48px;
   }
 
+  .artistGrid,
   .productGrid,
   .lotGrid,
   .serviceGrid {
@@ -746,6 +842,7 @@ dd {
   }
 
   .statusGrid,
+  .artistGrid,
   .productGrid,
   .lotGrid,
   .serviceGrid {
