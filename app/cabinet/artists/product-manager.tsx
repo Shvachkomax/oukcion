@@ -40,6 +40,46 @@ const emptyProduct: ProductDraft = {
   title: ""
 };
 
+const productCategoryGroups = [
+  {
+    label: "Товары масс-маркет",
+    options: [
+      "Брендированная продукция / мерч",
+      "Аудио и видеоносители",
+      "Печатная продукция"
+    ]
+  },
+  {
+    label: "Авторские товары",
+    options: [
+      "Видеопоздравление от публичной персоны",
+      "Автограф на оговоренном носителе",
+      "Аудио и видеоноситель с автографом"
+    ]
+  },
+  {
+    label: "Аукцион",
+    options: [
+      "Автограф на лимитированной авторской серии",
+      "Личный предмет публичной персоны",
+      "Сценический предмет одежды",
+      "Личный музыкальный инструмент или оборудование",
+      "Коллекционный эксклюзив",
+      "Предмет из частной коллекции с верификацией"
+    ]
+  },
+  {
+    label: "Услуги",
+    options: [
+      "Личная встреча",
+      "Онлайн-участие в мероприятии",
+      "Организация мероприятия с участием артиста",
+      "Рекламная акция от публичной персоны",
+      "Коммерческое использование предмета авторских прав"
+    ]
+  }
+];
+
 type ProductManagerProps = {
   artists: Artist[];
   products: PhysicalProduct[];
@@ -173,13 +213,15 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
               value={draft.category}
             >
               <option value="">Выберите категорию</option>
-              <option value="одежда">Одежда</option>
-              <option value="автограф">Автограф</option>
-              <option value="носитель">Носитель</option>
-              <option value="книга">Книга</option>
-              <option value="постер">Постер</option>
-              <option value="аксессуар">Аксессуар</option>
-              <option value="другое">Другое</option>
+              {productCategoryGroups.map((group) => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </label>
         </div>
