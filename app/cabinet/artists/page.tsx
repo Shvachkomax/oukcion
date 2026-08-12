@@ -85,7 +85,7 @@ export default async function CabinetArtistsPage({
           </p>
         </div>
 
-        <ArtistForm />
+        <ArtistForm artists={artists} />
 
         <div className="cabinetPanel">
           <div className="cabinetPanelHead">
@@ -102,7 +102,7 @@ export default async function CabinetArtistsPage({
             </div>
           </div>
           {artists.length > 0 ? (
-            <ProductForm artists={artists} />
+            <ProductForm artists={artists} products={products} />
           ) : (
             <p className="emptyState">
               Сначала сохраните карточку артиста, затем можно будет добавить

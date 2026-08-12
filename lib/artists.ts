@@ -6,11 +6,13 @@ export type Artist = {
   bio: string;
   category: string;
   city: string | null;
+  featured: boolean;
   image_url: string | null;
   name: string;
   services_count: number;
   shop_items_count: number;
   slug: string;
+  sort_order: number;
   verified: boolean;
 };
 
@@ -49,7 +51,7 @@ export async function getFeaturedArtists(): Promise<Artist[]> {
   const { data, error } = await supabase
     .from("artists")
     .select(
-      "auction_lots_count,bio,category,city,image_url,name,services_count,shop_items_count,slug,verified"
+      "auction_lots_count,bio,category,city,featured,image_url,name,services_count,shop_items_count,slug,sort_order,verified"
     )
     .eq("featured", true)
     .order("sort_order", { ascending: true })
@@ -87,7 +89,7 @@ export async function getCabinetArtists(): Promise<Artist[]> {
   const { data, error } = await client
     .from("artists")
     .select(
-      "auction_lots_count,bio,category,city,image_url,name,services_count,shop_items_count,slug,verified"
+      "auction_lots_count,bio,category,city,featured,image_url,name,services_count,shop_items_count,slug,sort_order,verified"
     )
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })

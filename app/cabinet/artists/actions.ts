@@ -203,7 +203,9 @@ export async function saveArtist(
       city: getString(formData, "city") || null,
       featured: formData.get("featured") === "on",
       image_url:
-        artistImage.publicUrl || getString(formData, "image_url") || null,
+        artistImage.publicUrl ||
+        getString(formData, "existing_image_url") ||
+        null,
       name,
       services_count: getNumber(formData, "services_count"),
       shop_items_count: 0,
@@ -300,7 +302,9 @@ export async function savePhysicalProduct(
       delivery: getString(formData, "delivery") || "доставка обсуждается",
       description,
       image_url:
-        productImage.publicUrl || getString(formData, "image_url") || null,
+        productImage.publicUrl ||
+        getString(formData, "existing_image_url") ||
+        null,
       price_rub: getNumber(formData, "price_rub"),
       product_type: "physical",
       provenance,

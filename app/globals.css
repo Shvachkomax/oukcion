@@ -899,6 +899,15 @@ dd {
   gap: 14px;
 }
 
+.secondaryFormButton {
+  background: var(--color-snow);
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-buttons);
+  color: var(--color-iron);
+  min-height: 42px;
+  padding: 0 14px;
+}
+
 .formStatus {
   border-radius: var(--radius-buttons);
   font-size: 14px;
