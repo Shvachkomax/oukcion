@@ -49,7 +49,7 @@ export function ArtistForm() {
 
       <label>
         Фото / обложка
-        <input name="image_url" placeholder="https://... или /image.png" />
+        <input accept="image/jpeg,image/png,image/webp" name="image_file" type="file" />
       </label>
 
       <div className="formGrid counters">

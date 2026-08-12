@@ -8,6 +8,8 @@ import type { ArtistFormState, ProductFormState } from "@/lib/artists";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 const accessCookieName = "oukcion_cabinet_access";
+const mediaBucketName = "oukcion-media";
+const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function getAccessCookieValue() {
   if (!process.env.CABINET_ACCESS_CODE) {
@@ -36,6 +38,87 @@ function getString(formData: FormData, key: string) {
 function getNumber(formData: FormData, key: string) {
   const value = Number.parseInt(getString(formData, key) || "0", 10);
   return Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+function getFileExtension(file: File) {
+  const fromName = file.name.split(".").pop()?.toLowerCase();
+
+  if (fromName && ["jpg", "jpeg", "png", "webp"].includes(fromName)) {
+    return fromName === "jpeg" ? "jpg" : fromName;
+  }
+
+  if (file.type === "image/png") {
+    return "png";
+  }
+
+  if (file.type === "image/webp") {
+    return "webp";
+  }
+
+  return "jpg";
+}
+
+async function uploadImage(
+  formData: FormData,
+  key: string,
+  folder: string,
+  slug: string
+) {
+  if (!supabaseAdmin) {
+    return {
+      error: "Не настроен SUPABASE_SERVICE_ROLE_KEY для загрузки фото.",
+      publicUrl: null
+    };
+  }
+
+  const value = formData.get(key);
+
+  if (!(value instanceof File) || value.size === 0) {
+    return {
+      error: null,
+      publicUrl: null
+    };
+  }
+
+  if (!allowedImageTypes.has(value.type)) {
+    return {
+      error: "Загрузите фото в формате JPEG, PNG или WebP.",
+      publicUrl: null
+    };
+  }
+
+  if (value.size > 8 * 1024 * 1024) {
+    return {
+      error: "Фото слишком большое. Максимум 8 МБ.",
+      publicUrl: null
+    };
+  }
+
+  const extension = getFileExtension(value);
+  const path = `${folder}/${slug}-${Date.now()}.${extension}`;
+  const { error } = await supabaseAdmin.storage
+    .from(mediaBucketName)
+    .upload(path, value, {
+      cacheControl: "31536000",
+      contentType: value.type,
+      upsert: true
+    });
+
+  if (error) {
+    return {
+      error: `Не удалось загрузить фото: ${error.message}`,
+      publicUrl: null
+    };
+  }
+
+  const { data } = supabaseAdmin.storage
+    .from(mediaBucketName)
+    .getPublicUrl(path);
+
+  return {
+    error: null,
+    publicUrl: data.publicUrl
+  };
 }
 
 export async function isCabinetAllowed() {
@@ -98,6 +181,20 @@ export async function saveArtist(
     };
   }
 
+  const artistImage = await uploadImage(
+    formData,
+    "image_file",
+    "artists",
+    slug
+  );
+
+  if (artistImage.error) {
+    return {
+      message: artistImage.error,
+      ok: false
+    };
+  }
+
   const { error } = await supabaseAdmin.from("artists").upsert(
     {
       auction_lots_count: getNumber(formData, "auction_lots_count"),
@@ -105,7 +202,8 @@ export async function saveArtist(
       category,
       city: getString(formData, "city") || null,
       featured: formData.get("featured") === "on",
-      image_url: getString(formData, "image_url") || null,
+      image_url:
+        artistImage.publicUrl || getString(formData, "image_url") || null,
       name,
       services_count: getNumber(formData, "services_count"),
       shop_items_count: 0,
@@ -179,6 +277,20 @@ export async function savePhysicalProduct(
     };
   }
 
+  const productImage = await uploadImage(
+    formData,
+    "image_file",
+    "products",
+    slug
+  );
+
+  if (productImage.error) {
+    return {
+      message: productImage.error,
+      ok: false
+    };
+  }
+
   const { error } = await supabaseAdmin.from("physical_products").upsert(
     {
       artist_name: artistName,
@@ -187,7 +299,8 @@ export async function savePhysicalProduct(
       condition: getString(formData, "condition") || "не указано",
       delivery: getString(formData, "delivery") || "доставка обсуждается",
       description,
-      image_url: getString(formData, "image_url") || null,
+      image_url:
+        productImage.publicUrl || getString(formData, "image_url") || null,
       price_rub: getNumber(formData, "price_rub"),
       product_type: "physical",
       provenance,

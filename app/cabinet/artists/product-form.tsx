@@ -80,7 +80,7 @@ export function ProductForm({ artists }: ProductFormProps) {
       <div className="formGrid">
         <label>
           Фото товара
-          <input name="image_url" placeholder="https://... или /image.png" />
+          <input accept="image/jpeg,image/png,image/webp" name="image_file" type="file" />
         </label>
         <label>
           Состояние
