@@ -51,6 +51,11 @@ button {
   font: inherit;
 }
 
+input,
+textarea {
+  font: inherit;
+}
+
 main {
   min-height: 100vh;
   overflow: hidden;
@@ -160,6 +165,11 @@ main {
   gap: 8px;
   justify-content: center;
   padding: 0 16px;
+}
+
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.68;
 }
 
 .secondaryLink {
@@ -751,6 +761,194 @@ dd {
   width: 30px;
 }
 
+.cabinetPage {
+  padding-top: clamp(24px, 4vw, 48px);
+}
+
+.cabinetShell {
+  margin: 0 auto;
+  max-width: var(--page-max-width);
+}
+
+.cabinetShell.compact {
+  max-width: 680px;
+}
+
+.backLink {
+  align-items: center;
+  color: var(--color-iron);
+  display: inline-flex;
+  font-size: 14px;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.cabinetHero {
+  margin-bottom: 28px;
+}
+
+.cabinetHero h1 {
+  font-size: clamp(42px, 5vw, 64px);
+  max-width: 900px;
+}
+
+.cabinetHero p {
+  color: var(--color-steel);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 16px;
+  max-width: 760px;
+}
+
+.cabinetForm,
+.cabinetList {
+  background: var(--color-snow);
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-cards);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.cabinetForm {
+  display: grid;
+  gap: 18px;
+}
+
+.formGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.formGrid.counters {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cabinetForm label {
+  color: var(--color-iron);
+  display: grid;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 8px;
+}
+
+.cabinetForm input,
+.cabinetForm textarea {
+  background: var(--color-paper);
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-buttons);
+  color: var(--color-obsidian);
+  min-height: 46px;
+  outline: none;
+  padding: 12px 14px;
+  resize: vertical;
+  width: 100%;
+}
+
+.cabinetForm input:focus,
+.cabinetForm textarea:focus {
+  border-color: var(--color-ash);
+  box-shadow: 0 0 0 3px rgba(161, 161, 170, 0.22);
+}
+
+.toggleRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.toggleRow label {
+  align-items: center;
+  background: var(--color-paper);
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-buttons);
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+}
+
+.toggleRow input {
+  min-height: 0;
+  width: auto;
+}
+
+.formFooter {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.formStatus {
+  border-radius: var(--radius-buttons);
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 10px 12px;
+}
+
+.formStatus.success {
+  background: #e8f6ee;
+  color: #166534;
+}
+
+.formStatus.error {
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.cabinetList {
+  margin-top: 18px;
+}
+
+.cabinetList h2 {
+  color: var(--color-obsidian);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.cabinetRows {
+  display: grid;
+  gap: 10px;
+}
+
+.cabinetRows article {
+  background: var(--color-paper);
+  border: 1px solid var(--color-cloud);
+  border-radius: 22px;
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.cabinetRows article div {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.cabinetRows strong {
+  color: var(--color-obsidian);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cabinetRows span,
+.cabinetRows small,
+.emptyState {
+  color: var(--color-fog);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.cabinetRows p {
+  color: var(--color-steel);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 @media (max-width: 920px) {
   main {
     padding-left: 16px;
@@ -786,7 +984,9 @@ dd {
   .artistGrid,
   .productGrid,
   .lotGrid,
-  .serviceGrid {
+  .serviceGrid,
+  .formGrid,
+  .formGrid.counters {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -845,7 +1045,9 @@ dd {
   .artistGrid,
   .productGrid,
   .lotGrid,
-  .serviceGrid {
+  .serviceGrid,
+  .formGrid,
+  .formGrid.counters {
     grid-template-columns: 1fr;
   }
 

@@ -12,7 +12,7 @@ import {
   Star,
   UserCheck
 } from "lucide-react";
-import { fallbackArtists, getFeaturedArtists } from "@/lib/artists";
+import { getFeaturedArtists } from "@/lib/artists";
 
 const money = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -111,7 +111,7 @@ export default async function Home() {
         <nav className="nav" aria-label="Основные разделы">
           <a href="#shop">Магазин</a>
           <a href="#services">Услуги</a>
-          <a href="#artists">Артисты</a>
+          {artists.length > 0 ? <a href="#artists">Артисты</a> : null}
           <a href="#auction">Аукцион</a>
           <a href="#seller">Продавцам</a>
         </nav>
@@ -119,10 +119,10 @@ export default async function Home() {
           <button className="iconButton" aria-label="Поиск">
             <Search size={18} />
           </button>
-          <button className="primaryButton">
+          <a className="primaryButton" href="/cabinet/artists">
             <UserCheck size={17} />
             Войти
-          </button>
+          </a>
         </div>
       </header>
 
@@ -194,59 +194,60 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section artistsSection" id="artists">
-        <div className="sectionHead">
-          <div>
-            <span className="kicker">
-              <BadgeCheck size={15} /> публичные персоны
-            </span>
-            <h2>Карточка артиста собирает доверие, товары и услуги</h2>
+      {artists.length > 0 ? (
+        <section className="section artistsSection" id="artists">
+          <div className="sectionHead">
+            <div>
+              <span className="kicker">
+                <BadgeCheck size={15} /> публичные персоны
+              </span>
+              <h2>Карточка артиста собирает доверие, товары и услуги</h2>
+            </div>
+            <a href="#seller">
+              Стать продавцом
+              <ArrowRight size={15} />
+            </a>
           </div>
-          <a href="#seller">
-            Стать продавцом
-            <ArrowRight size={15} />
-          </a>
-        </div>
-        <div className="artistGrid">
-          {artists.map((artist, index) => (
-            <article className="artistCard" key={artist.slug}>
-              <div
-                className="artistPortrait"
-                style={{
-                  backgroundImage: `url("${
-                    artist.image_url ||
-                    fallbackArtists[index % fallbackArtists.length].image_url
-                  }")`
-                }}
-              >
-                <span>{artist.verified ? "проверен" : "на модерации"}</span>
-              </div>
-              <div className="artistBody">
-                <div className="artistMeta">
-                  <span>{artist.category}</span>
-                  {artist.city ? <span>{artist.city}</span> : null}
+          <div className="artistGrid">
+            {artists.map((artist) => (
+              <article className="artistCard" key={artist.slug}>
+                <div
+                  className="artistPortrait"
+                  style={{
+                    backgroundImage: `url("${
+                      artist.image_url || "/cinematic-hero.png"
+                    }")`
+                  }}
+                >
+                  <span>{artist.verified ? "проверен" : "на модерации"}</span>
                 </div>
-                <h3>{artist.name}</h3>
-                <p>{artist.bio}</p>
-                <div className="artistStats">
-                  <span>
-                    <strong>{artist.shop_items_count}</strong>
-                    товаров
-                  </span>
-                  <span>
-                    <strong>{artist.auction_lots_count}</strong>
-                    лотов
-                  </span>
-                  <span>
-                    <strong>{artist.services_count}</strong>
-                    услуг
-                  </span>
+                <div className="artistBody">
+                  <div className="artistMeta">
+                    <span>{artist.category}</span>
+                    {artist.city ? <span>{artist.city}</span> : null}
+                  </div>
+                  <h3>{artist.name}</h3>
+                  <p>{artist.bio}</p>
+                  <div className="artistStats">
+                    <span>
+                      <strong>{artist.shop_items_count}</strong>
+                      товаров
+                    </span>
+                    <span>
+                      <strong>{artist.auction_lots_count}</strong>
+                      лотов
+                    </span>
+                    <span>
+                      <strong>{artist.services_count}</strong>
+                      услуг
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="section shopSection" id="shop">
         <div className="sectionHead">
