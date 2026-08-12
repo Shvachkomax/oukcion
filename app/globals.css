@@ -908,6 +908,17 @@ dd {
   padding: 0 14px;
 }
 
+.rowActionButton {
+  justify-self: start;
+  background: var(--color-snow);
+  border: 1px solid var(--color-cloud);
+  border-radius: var(--radius-buttons);
+  color: var(--color-iron);
+  font-size: 13px;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
 .formStatus {
   border-radius: var(--radius-buttons);
   font-size: 14px;

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft, BadgeCheck, LockKeyhole, PackagePlus } from "lucide-react";
 import { getCabinetArtists, getCabinetProducts } from "@/lib/artists";
-import { ArtistForm } from "./artist-form";
-import { ProductForm } from "./product-form";
+import { ArtistManager } from "./artist-manager";
+import { ProductManager } from "./product-manager";
 import { isCabinetAllowed, loginToCabinet } from "./actions";
 
 type CabinetPageProps = {
@@ -85,7 +85,7 @@ export default async function CabinetArtistsPage({
           </p>
         </div>
 
-        <ArtistForm artists={artists} />
+        <ArtistManager artists={artists} />
 
         <div className="cabinetPanel">
           <div className="cabinetPanelHead">
@@ -102,7 +102,7 @@ export default async function CabinetArtistsPage({
             </div>
           </div>
           {artists.length > 0 ? (
-            <ProductForm artists={artists} products={products} />
+            <ProductManager artists={artists} products={products} />
           ) : (
             <p className="emptyState">
               Сначала сохраните карточку артиста, затем можно будет добавить
@@ -111,57 +111,6 @@ export default async function CabinetArtistsPage({
           )}
         </div>
 
-        <div className="cabinetList">
-          <h2>Сохранённые карточки</h2>
-          {artists.length > 0 ? (
-            <div className="cabinetRows">
-              {artists.map((artist) => (
-                <article key={artist.slug}>
-                  <div>
-                    <strong>{artist.name}</strong>
-                    <span>
-                      {artist.category}
-                      {artist.city ? `, ${artist.city}` : ""}
-                    </span>
-                  </div>
-                  <p>{artist.bio}</p>
-                  <small>
-                    {artist.shop_items_count} товаров ·{" "}
-                    {artist.auction_lots_count} лотов ·{" "}
-                    {artist.services_count} услуг
-                  </small>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <p className="emptyState">Пока нет сохранённых карточек.</p>
-          )}
-        </div>
-
-        <div className="cabinetList">
-          <h2>Физические товары</h2>
-          {products.length > 0 ? (
-            <div className="cabinetRows">
-              {products.map((product) => (
-                <article key={product.id}>
-                  <div>
-                    <strong>{product.title}</strong>
-                    <span>
-                      {product.artist_name} · {product.status}
-                    </span>
-                  </div>
-                  <p>{product.description}</p>
-                  <small>
-                    {product.category} · {product.price_rub.toLocaleString("ru-RU")} ₽ ·{" "}
-                    {product.quantity} шт.
-                  </small>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <p className="emptyState">Пока нет физических товаров.</p>
-          )}
-        </div>
       </section>
     </main>
   );
