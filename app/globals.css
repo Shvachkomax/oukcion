@@ -850,6 +850,12 @@ dd {
   box-shadow: 0 0 0 3px rgba(161, 161, 170, 0.22);
 }
 
+.cabinetForm input:disabled {
+  color: var(--color-ash);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
 .toggleRow {
   display: flex;
   flex-wrap: wrap;

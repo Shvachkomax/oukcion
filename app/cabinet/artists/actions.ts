@@ -92,7 +92,8 @@ export async function saveArtist(
 
   if (!name || !category || !bio || !slug) {
     return {
-      message: "Заполните имя, тип артиста и короткое описание.",
+      message:
+        "Заполните имя артиста, название муз. группы и описание артиста.",
       ok: false
     };
   }

@@ -24,12 +24,12 @@ export function ArtistForm() {
           <input name="name" placeholder="Например: Имя артиста" required />
         </label>
         <label>
-          Короткий адрес
+          Сценическое имя
           <input name="slug" placeholder="artist-name" />
         </label>
         <label>
-          Тип
-          <input name="category" placeholder="музыка, кино, спорт" required />
+          Название муз. группы
+          <input name="category" placeholder="Название группы" required />
         </label>
         <label>
           Город
@@ -38,10 +38,10 @@ export function ArtistForm() {
       </div>
 
       <label>
-        Короткое описание
+        Описание артиста
         <textarea
           name="bio"
-          placeholder="Что будет в карточке артиста: товары, лоты, услуги, статус проверки."
+          placeholder="Расскажите об артисте, творческом пути, аудитории и формате участия в проекте."
           required
           rows={5}
         />
@@ -55,7 +55,12 @@ export function ArtistForm() {
       <div className="formGrid counters">
         <label>
           Товары
-          <input min="0" name="shop_items_count" type="number" />
+          <input
+            min="0"
+            name="shop_items_count"
+            placeholder="0"
+            type="number"
+          />
         </label>
         <label>
           Лоты
