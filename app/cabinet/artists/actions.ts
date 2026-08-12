@@ -10,6 +10,8 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 const accessCookieName = "oukcion_cabinet_access";
 const mediaBucketName = "oukcion-media";
 const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+const maxImageSizeMb = 4;
+const maxImageSizeBytes = maxImageSizeMb * 1024 * 1024;
 
 function getAccessCookieValue() {
   if (!process.env.CABINET_ACCESS_CODE) {
@@ -87,9 +89,9 @@ async function uploadImage(
     };
   }
 
-  if (value.size > 8 * 1024 * 1024) {
+  if (value.size > maxImageSizeBytes) {
     return {
-      error: "Фото слишком большое. Максимум 8 МБ.",
+      error: `Фото слишком большое. Максимум ${maxImageSizeMb} МБ.`,
       publicUrl: null
     };
   }

@@ -268,6 +268,7 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
               name="image_file"
               type="file"
             />
+            <span className="fieldHint">JPEG, PNG или WebP до 4 МБ.</span>
           </label>
           <label>
             Состояние
