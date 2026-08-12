@@ -3,7 +3,7 @@
 import { ChangeEvent, useMemo, useRef, useState, useActionState } from "react";
 import { Save } from "lucide-react";
 import type { Artist, ArtistFormState } from "@/lib/artists";
-import { saveArtist } from "./actions";
+import { deleteArtist, saveArtist } from "./actions";
 
 const initialState: ArtistFormState = {
   message: "",
@@ -290,13 +290,33 @@ export function ArtistManager({ artists }: ArtistManagerProps) {
                   {artist.auction_lots_count} лотов · {artist.services_count}{" "}
                   услуг
                 </small>
-                <button
-                  className="rowActionButton"
-                  onClick={() => loadArtist(artist.slug)}
-                  type="button"
-                >
-                  Редактировать
-                </button>
+                <div className="rowActions">
+                  <button
+                    className="rowActionButton"
+                    onClick={() => loadArtist(artist.slug)}
+                    type="button"
+                  >
+                    Редактировать
+                  </button>
+                  <form action={deleteArtist}>
+                    <input name="slug" type="hidden" value={artist.slug} />
+                    <button
+                      className="rowDangerButton"
+                      onClick={(event) => {
+                        if (
+                          !window.confirm(
+                            "Удалить карточку артиста? Если у артиста есть товары, сначала нужно удалить их."
+                          )
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                      type="submit"
+                    >
+                      Удалить
+                    </button>
+                  </form>
+                </div>
               </article>
             ))}
           </div>

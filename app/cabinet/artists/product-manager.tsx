@@ -3,7 +3,7 @@
 import { ChangeEvent, useMemo, useRef, useState, useActionState } from "react";
 import { PackagePlus } from "lucide-react";
 import type { Artist, PhysicalProduct, ProductFormState } from "@/lib/artists";
-import { savePhysicalProduct } from "./actions";
+import { deletePhysicalProduct, savePhysicalProduct } from "./actions";
 
 const initialState: ProductFormState = {
   message: "",
@@ -322,13 +322,29 @@ export function ProductManager({ artists, products }: ProductManagerProps) {
                   {product.category} · {product.price_rub.toLocaleString("ru-RU")} ₽ ·{" "}
                   {product.quantity} шт.
                 </small>
-                <button
-                  className="rowActionButton"
-                  onClick={() => loadProduct(product.slug)}
-                  type="button"
-                >
-                  Редактировать
-                </button>
+                <div className="rowActions">
+                  <button
+                    className="rowActionButton"
+                    onClick={() => loadProduct(product.slug)}
+                    type="button"
+                  >
+                    Редактировать
+                  </button>
+                  <form action={deletePhysicalProduct}>
+                    <input name="slug" type="hidden" value={product.slug} />
+                    <button
+                      className="rowDangerButton"
+                      onClick={(event) => {
+                        if (!window.confirm("Удалить физический товар?")) {
+                          event.preventDefault();
+                        }
+                      }}
+                      type="submit"
+                    >
+                      Удалить
+                    </button>
+                  </form>
+                </div>
               </article>
             ))}
           </div>

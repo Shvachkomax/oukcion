@@ -7,6 +7,7 @@ import { isCabinetAllowed, loginToCabinet } from "./actions";
 
 type CabinetPageProps = {
   searchParams: Promise<{
+    deleted?: string;
     error?: string;
   }>;
 };
@@ -16,7 +17,7 @@ export const revalidate = 0;
 export default async function CabinetArtistsPage({
   searchParams
 }: CabinetPageProps) {
-  const [{ error }, allowed] = await Promise.all([
+  const [{ deleted, error }, allowed] = await Promise.all([
     searchParams,
     isCabinetAllowed()
   ]);
@@ -84,6 +85,36 @@ export default async function CabinetArtistsPage({
             “Показывать на главной”, карточка появится в блоке артистов.
           </p>
         </div>
+
+        {deleted === "artist" ? (
+          <p className="formStatus success">Карточка артиста удалена.</p>
+        ) : null}
+        {deleted === "product" ? (
+          <p className="formStatus success">Физический товар удалён.</p>
+        ) : null}
+        {error === "artist-has-products" ? (
+          <p className="formStatus error">
+            Сначала удалите физические товары артиста, потом карточку артиста.
+          </p>
+        ) : null}
+        {error === "delete-artist-failed" ? (
+          <p className="formStatus error">
+            Не удалось удалить карточку артиста. Попробуйте ещё раз.
+          </p>
+        ) : null}
+        {error === "delete-product-failed" ? (
+          <p className="formStatus error">
+            Не удалось удалить физический товар. Попробуйте ещё раз.
+          </p>
+        ) : null}
+        {error === "not-allowed" ? (
+          <p className="formStatus error">Сначала войдите в кабинет.</p>
+        ) : null}
+        {error === "admin-not-configured" ? (
+          <p className="formStatus error">
+            В Vercel не настроен SUPABASE_SERVICE_ROLE_KEY.
+          </p>
+        ) : null}
 
         <ArtistManager artists={artists} />
 

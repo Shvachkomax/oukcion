@@ -919,6 +919,28 @@ dd {
   padding: 0 12px;
 }
 
+.rowActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-self: start;
+}
+
+.rowActions form {
+  margin: 0;
+}
+
+.rowDangerButton {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: var(--radius-buttons);
+  color: #be123c;
+  font-size: 13px;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
 .formStatus {
   border-radius: var(--radius-buttons);
   font-size: 14px;

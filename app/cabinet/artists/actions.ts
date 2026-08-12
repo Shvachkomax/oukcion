@@ -334,3 +334,74 @@ export async function savePhysicalProduct(
     ok: true
   };
 }
+
+export async function deleteArtist(formData: FormData) {
+  if (!(await isCabinetAllowed())) {
+    redirect("/cabinet/artists?error=not-allowed");
+  }
+
+  if (!supabaseAdmin) {
+    redirect("/cabinet/artists?error=admin-not-configured");
+  }
+
+  const slug = getString(formData, "slug");
+
+  if (!slug) {
+    redirect("/cabinet/artists?error=delete-artist-failed");
+  }
+
+  const { count, error: countError } = await supabaseAdmin
+    .from("physical_products")
+    .select("id", { count: "exact", head: true })
+    .eq("artist_slug", slug);
+
+  if (countError) {
+    redirect("/cabinet/artists?error=delete-artist-failed");
+  }
+
+  if (count && count > 0) {
+    redirect("/cabinet/artists?error=artist-has-products");
+  }
+
+  const { error } = await supabaseAdmin
+    .from("artists")
+    .delete()
+    .eq("slug", slug);
+
+  if (error) {
+    redirect("/cabinet/artists?error=delete-artist-failed");
+  }
+
+  revalidatePath("/");
+  revalidatePath("/cabinet/artists");
+  redirect("/cabinet/artists?deleted=artist");
+}
+
+export async function deletePhysicalProduct(formData: FormData) {
+  if (!(await isCabinetAllowed())) {
+    redirect("/cabinet/artists?error=not-allowed");
+  }
+
+  if (!supabaseAdmin) {
+    redirect("/cabinet/artists?error=admin-not-configured");
+  }
+
+  const slug = getString(formData, "slug");
+
+  if (!slug) {
+    redirect("/cabinet/artists?error=delete-product-failed");
+  }
+
+  const { error } = await supabaseAdmin
+    .from("physical_products")
+    .delete()
+    .eq("slug", slug);
+
+  if (error) {
+    redirect("/cabinet/artists?error=delete-product-failed");
+  }
+
+  revalidatePath("/");
+  revalidatePath("/cabinet/artists");
+  redirect("/cabinet/artists?deleted=product");
+}
