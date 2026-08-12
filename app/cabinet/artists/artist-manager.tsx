@@ -1,6 +1,14 @@
 "use client";
 
-import { ChangeEvent, useMemo, useRef, useState, useActionState } from "react";
+import {
+  ChangeEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useActionState
+} from "react";
+import { useRouter } from "next/navigation";
 import { Save } from "lucide-react";
 import type { Artist, ArtistFormState } from "@/lib/artists";
 import { deleteArtist, saveArtist } from "./actions";
@@ -43,6 +51,7 @@ type ArtistManagerProps = {
 };
 
 export function ArtistManager({ artists }: ArtistManagerProps) {
+  const router = useRouter();
   const [state, formAction, pending] = useActionState(
     saveArtist,
     initialState
@@ -55,6 +64,12 @@ export function ArtistManager({ artists }: ArtistManagerProps) {
     () => new Map(artists.map((artist) => [artist.slug, artist])),
     [artists]
   );
+
+  useEffect(() => {
+    if (state.ok) {
+      router.refresh();
+    }
+  }, [router, state.ok, state.message]);
 
   function loadArtist(slug: string) {
     setSelectedSlug(slug);
