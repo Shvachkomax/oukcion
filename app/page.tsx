@@ -12,7 +12,7 @@ import {
   Star,
   UserCheck
 } from "lucide-react";
-import { getFeaturedArtists } from "@/lib/artists";
+import { getFeaturedArtists, getPublishedProducts } from "@/lib/artists";
 
 const money = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -99,7 +99,10 @@ const sellerSteps = [
 export const revalidate = 60;
 
 export default async function Home() {
-  const artists = await getFeaturedArtists();
+  const [artists, publishedProducts] = await Promise.all([
+    getFeaturedArtists(),
+    getPublishedProducts()
+  ]);
 
   return (
     <main>
@@ -246,6 +249,38 @@ export default async function Home() {
               </article>
             ))}
           </div>
+          {publishedProducts.length > 0 ? (
+            <div className="artistProducts">
+              <div className="artistProductsHead">
+                <span>товары артистов</span>
+                <h3>Опубликованные позиции</h3>
+              </div>
+              <div className="artistProductGrid">
+                {publishedProducts.map((product) => (
+                  <article className="artistProductCard" key={product.id}>
+                    <div
+                      className="artistProductImage"
+                      style={{
+                        backgroundImage: `url("${
+                          product.image_url || "/lot-costume.png"
+                        }")`
+                      }}
+                    >
+                      <span>{product.category}</span>
+                    </div>
+                    <div className="artistProductBody">
+                      <p>{product.artist_name}</p>
+                      <h4>{product.title}</h4>
+                      <div className="cardFooter">
+                        <strong>{money.format(product.price_rub)}</strong>
+                        <span>{product.quantity} шт.</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </section>
       ) : null}
 

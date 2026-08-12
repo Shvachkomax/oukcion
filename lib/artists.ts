@@ -174,3 +174,44 @@ export async function getCabinetProducts(): Promise<PhysicalProduct[]> {
     return [];
   }
 }
+
+export async function getPublishedProducts(): Promise<PhysicalProduct[]> {
+  if (!supabase) {
+    return [];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("physical_products")
+      .select(
+        "artist_name,artist_slug,category,condition,delivery,description,id,image_url,price_rub,provenance,quantity,slug,status,title"
+      )
+      .eq("status", "published")
+      .order("created_at", { ascending: false })
+      .limit(12);
+
+    if (error || !data?.length) {
+      return [];
+    }
+
+    return data.map((product) => ({
+      artist_name: normalizeText(product.artist_name),
+      artist_slug: normalizeText(product.artist_slug),
+      category: normalizeText(product.category),
+      condition: normalizeText(product.condition) || "не указано",
+      delivery: normalizeText(product.delivery) || "доставка обсуждается",
+      description: normalizeText(product.description),
+      id: normalizeText(product.id),
+      image_url: product.image_url || null,
+      price_rub: normalizeNumber(product.price_rub),
+      provenance: normalizeText(product.provenance),
+      quantity: normalizeNumber(product.quantity),
+      slug: normalizeText(product.slug),
+      status: normalizeText(product.status) || "draft",
+      title: normalizeText(product.title)
+    }));
+  } catch (error) {
+    console.error("Published products load failed", error);
+    return [];
+  }
+}
