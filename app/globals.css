@@ -359,7 +359,7 @@ h1 {
 
 .statusGrid {
   display: grid;
-  gap: 1px;
+  gap: 0;
   grid-template-columns: repeat(3, 1fr);
   margin-bottom: var(--section-gap);
   overflow: hidden;
@@ -367,22 +367,37 @@ h1 {
 
 .statusGrid div {
   background: var(--color-snow);
+  border-right: 1px solid var(--color-cloud);
   padding: 26px 28px;
+}
+
+.statusGrid div:last-child {
+  border-right: 0;
 }
 
 .statusGrid strong {
   color: var(--color-obsidian);
   display: block;
-  font-size: clamp(28px, 4vw, 46px);
+  font-size: clamp(24px, 2.8vw, 34px);
   font-weight: 600;
-  line-height: 1.06;
+  line-height: 1.16;
+  margin-top: 8px;
+  max-width: 340px;
 }
 
 .statusGrid span {
   color: var(--color-steel);
   display: block;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.statusGrid p {
+  color: var(--color-fog);
   font-size: 14px;
-  margin-top: 6px;
+  line-height: 1.45;
+  margin-top: 12px;
+  max-width: 320px;
 }
 
 .section {
@@ -719,6 +734,15 @@ dd {
   .lotGrid,
   .serviceGrid {
     grid-template-columns: 1fr;
+  }
+
+  .statusGrid div {
+    border-bottom: 1px solid var(--color-cloud);
+    border-right: 0;
+  }
+
+  .statusGrid div:last-child {
+    border-bottom: 0;
   }
 
   .sectionHead {

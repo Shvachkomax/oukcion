@@ -12,7 +12,6 @@ import {
   Star,
   UserCheck
 } from "lucide-react";
-import { isSupabaseConfigured } from "@/lib/supabase";
 
 const money = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -161,7 +160,7 @@ export default function Home() {
           </div>
           <div className="trustStrip">
             <span>
-              <ShieldCheck size={15} /> RLS
+              <ShieldCheck size={15} /> безопасные торги
             </span>
             <span>
               <BadgeCheck size={15} /> проверка продавцов
@@ -170,18 +169,21 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="statusGrid" aria-label="Состояние платформы">
+      <section className="statusGrid" aria-label="Ключевая информация">
         <div>
-          <strong>{isSupabaseConfigured ? "Подключен" : "Ожидает ключи"}</strong>
-          <span>Supabase</span>
+          <span>Проверка продавцов</span>
+          <strong>Документы и полномочия</strong>
+          <p>Лоты появляются после подтверждения представителя и модерации.</p>
         </div>
         <div>
-          <strong>RUB</strong>
           <span>Валюта торгов</span>
+          <strong>RUB</strong>
+          <p>Первый рынок платформы работает в рублях.</p>
         </div>
         <div>
-          <strong>4 этапа</strong>
           <span>Модерация</span>
+          <strong>4 этапа</strong>
+          <p>Заявка, проверка, описание лота и публикация.</p>
         </div>
       </section>
 
