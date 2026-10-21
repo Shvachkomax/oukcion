@@ -290,7 +290,14 @@ export async function getAllPublishedProducts(): Promise<LoadResult<PhysicalProd
 }
 
 export async function getProductBySlug(slug: string): Promise<PhysicalProduct | null> {
-  if (!supabase || !slug) {
+  const decodedSlug = (() => {
+    try {
+      return decodeURIComponent(slug);
+    } catch {
+      return slug;
+    }
+  })();
+  if (!supabase || !decodedSlug) {
     return null;
   }
 
@@ -300,7 +307,7 @@ export async function getProductBySlug(slug: string): Promise<PhysicalProduct | 
       .select(
         "artist_name,artist_slug,category,condition,delivery,description,id,image_url,price_rub,provenance,quantity,slug,status,title"
       )
-      .eq("slug", slug)
+      .eq("slug", decodedSlug)
       .eq("status", "published")
       .maybeSingle();
 
@@ -330,7 +337,14 @@ export async function getProductBySlug(slug: string): Promise<PhysicalProduct | 
 }
 
 export async function getArtistBySlug(slug: string): Promise<Artist | null> {
-  if (!supabase || !slug) {
+  const decodedSlug = (() => {
+    try {
+      return decodeURIComponent(slug);
+    } catch {
+      return slug;
+    }
+  })();
+  if (!supabase || !decodedSlug) {
     return null;
   }
 
@@ -340,7 +354,7 @@ export async function getArtistBySlug(slug: string): Promise<Artist | null> {
       .select(
         "auction_lots_count,bio,category,city,featured,image_url,name,services_count,shop_items_count,slug,sort_order,verified"
       )
-      .eq("slug", slug)
+      .eq("slug", decodedSlug)
       .maybeSingle();
 
     if (error || !data) {
@@ -366,7 +380,14 @@ export async function getArtistBySlug(slug: string): Promise<Artist | null> {
 }
 
 export async function getPublishedProductsByArtistSlug(slug: string): Promise<PhysicalProduct[]> {
-  if (!supabase || !slug) {
+  const decodedSlug = (() => {
+    try {
+      return decodeURIComponent(slug);
+    } catch {
+      return slug;
+    }
+  })();
+  if (!supabase || !decodedSlug) {
     return [];
   }
 
@@ -376,7 +397,7 @@ export async function getPublishedProductsByArtistSlug(slug: string): Promise<Ph
       .select(
         "artist_name,artist_slug,category,condition,delivery,description,id,image_url,price_rub,provenance,quantity,slug,status,title"
       )
-      .eq("artist_slug", slug)
+      .eq("artist_slug", decodedSlug)
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .limit(100);
