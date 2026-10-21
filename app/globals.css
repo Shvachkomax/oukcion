@@ -1488,3 +1488,31 @@ dd {
     width: 180px;
   }
 }
+
+.notFoundSection {
+  padding-bottom: 90px;
+  padding-top: 90px;
+}
+.notFoundSection h1 {
+  font-size: clamp(32px, 4vw, 56px);
+  margin: 12px 0 16px;
+}
+.notFoundText {
+  color: var(--color-steel);
+  line-height: 1.7;
+  margin: 0 0 28px;
+  max-width: 560px;
+}
+.notFoundActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.secondaryLink {
+  align-items: center;
+  color: var(--color-fog);
+  display: inline-flex;
+  gap: 8px;
+  text-decoration: none;
+}

@@ -59,6 +59,18 @@ function normalizeNumber(value: unknown) {
   return Number.isFinite(numberValue) ? numberValue : 0;
 }
 
+export function decodeSlug(slug: string): string {
+  if (!slug) {
+    return "";
+  }
+
+  try {
+    return decodeURIComponent(slug).trim();
+  } catch {
+    return /%[0-9a-fA-F]{2}/.test(slug) ? "" : slug.trim();
+  }
+}
+
 export async function getFeaturedArtists(): Promise<LoadResult<Artist[]>> {
   if (!supabase) {
     return { data: [], status: "error" };
@@ -289,16 +301,16 @@ export async function getAllPublishedProducts(): Promise<LoadResult<PhysicalProd
   }
 }
 
-export async function getProductBySlug(slug: string): Promise<PhysicalProduct | null> {
-  const decodedSlug = (() => {
-    try {
-      return decodeURIComponent(slug);
-    } catch {
-      return slug;
-    }
-  })();
-  if (!supabase || !decodedSlug) {
-    return null;
+export async function getProductBySlug(
+  slug: string
+): Promise<LoadResult<PhysicalProduct | null>> {
+  const decodedSlug = decodeSlug(slug);
+  if (!supabase) {
+    return { data: null, status: "error" };
+  }
+
+  if (!decodedSlug) {
+    return { data: null, status: "ok" };
   }
 
   try {
@@ -311,41 +323,48 @@ export async function getProductBySlug(slug: string): Promise<PhysicalProduct | 
       .eq("status", "published")
       .maybeSingle();
 
-    if (error || !data) {
-      return null;
+    if (error) {
+      console.error("Product by slug query failed", error.message);
+      return { data: null, status: "error" };
+    }
+
+    if (!data) {
+      return { data: null, status: "ok" };
     }
 
     return {
-      artist_name: normalizeText(data.artist_name),
-      artist_slug: normalizeText(data.artist_slug),
-      category: normalizeText(data.category),
-      condition: normalizeText(data.condition) || "не указано",
-      delivery: normalizeText(data.delivery) || "доставка обсуждается",
-      description: normalizeText(data.description),
-      id: normalizeText(data.id),
-      image_url: data.image_url || null,
-      price_rub: normalizeNumber(data.price_rub),
-      provenance: normalizeText(data.provenance),
-      quantity: normalizeNumber(data.quantity),
-      slug: normalizeText(data.slug),
-      status: normalizeText(data.status) || "draft",
-      title: normalizeText(data.title)
+      data: {
+        artist_name: normalizeText(data.artist_name),
+        artist_slug: normalizeText(data.artist_slug),
+        category: normalizeText(data.category),
+        condition: normalizeText(data.condition) || "не указано",
+        delivery: normalizeText(data.delivery) || "доставка обсуждается",
+        description: normalizeText(data.description),
+        id: normalizeText(data.id),
+        image_url: data.image_url || null,
+        price_rub: normalizeNumber(data.price_rub),
+        provenance: normalizeText(data.provenance),
+        quantity: normalizeNumber(data.quantity),
+        slug: normalizeText(data.slug),
+        status: normalizeText(data.status) || "draft",
+        title: normalizeText(data.title)
+      },
+      status: "ok"
     };
-  } catch {
-    return null;
+  } catch (error) {
+    console.error("Product by slug load failed", error);
+    return { data: null, status: "error" };
   }
 }
 
-export async function getArtistBySlug(slug: string): Promise<Artist | null> {
-  const decodedSlug = (() => {
-    try {
-      return decodeURIComponent(slug);
-    } catch {
-      return slug;
-    }
-  })();
-  if (!supabase || !decodedSlug) {
-    return null;
+export async function getArtistBySlug(slug: string): Promise<LoadResult<Artist | null>> {
+  const decodedSlug = decodeSlug(slug);
+  if (!supabase) {
+    return { data: null, status: "error" };
+  }
+
+  if (!decodedSlug) {
+    return { data: null, status: "ok" };
   }
 
   try {
@@ -357,38 +376,52 @@ export async function getArtistBySlug(slug: string): Promise<Artist | null> {
       .eq("slug", decodedSlug)
       .maybeSingle();
 
-    if (error || !data) {
-      return null;
+    if (error) {
+      console.error("Artist by slug query failed", error.message);
+      return { data: null, status: "error" };
     }
 
-    const { data: productCounts } = await supabase
+    if (!data) {
+      return { data: null, status: "ok" };
+    }
+
+    const { data: productCounts, error: countsError } = await supabase
       .from("physical_products")
       .select("artist_slug")
-      .eq("artist_slug", slug)
+      .eq("artist_slug", decodedSlug)
       .eq("status", "published");
 
+    if (countsError) {
+      console.error("Artist product count query failed", countsError.message);
+      return { data: null, status: "error" };
+    }
+
     return {
-      ...data,
-      auction_lots_count: normalizeNumber(data.auction_lots_count),
-      services_count: normalizeNumber(data.services_count),
-      shop_items_count: productCounts?.length || 0,
-      sort_order: normalizeNumber(data.sort_order)
+      data: {
+        ...data,
+        auction_lots_count: normalizeNumber(data.auction_lots_count),
+        services_count: normalizeNumber(data.services_count),
+        shop_items_count: productCounts?.length || 0,
+        sort_order: normalizeNumber(data.sort_order)
+      },
+      status: "ok"
     };
-  } catch {
-    return null;
+  } catch (error) {
+    console.error("Artist by slug load failed", error);
+    return { data: null, status: "error" };
   }
 }
 
-export async function getPublishedProductsByArtistSlug(slug: string): Promise<PhysicalProduct[]> {
-  const decodedSlug = (() => {
-    try {
-      return decodeURIComponent(slug);
-    } catch {
-      return slug;
-    }
-  })();
-  if (!supabase || !decodedSlug) {
-    return [];
+export async function getPublishedProductsByArtistSlug(
+  slug: string
+): Promise<LoadResult<PhysicalProduct[]>> {
+  const decodedSlug = decodeSlug(slug);
+  if (!supabase) {
+    return { data: [], status: "error" };
+  }
+
+  if (!decodedSlug) {
+    return { data: [], status: "ok" };
   }
 
   try {
@@ -402,27 +435,36 @@ export async function getPublishedProductsByArtistSlug(slug: string): Promise<Ph
       .order("created_at", { ascending: false })
       .limit(100);
 
-    if (error || !data?.length) {
-      return [];
+    if (error) {
+      console.error("Artist products query failed", error.message);
+      return { data: [], status: "error" };
     }
 
-    return data.map((product) => ({
-      artist_name: normalizeText(product.artist_name),
-      artist_slug: normalizeText(product.artist_slug),
-      category: normalizeText(product.category),
-      condition: normalizeText(product.condition) || "не указано",
-      delivery: normalizeText(product.delivery) || "доставка обсуждается",
-      description: normalizeText(product.description),
-      id: normalizeText(product.id),
-      image_url: product.image_url || null,
-      price_rub: normalizeNumber(product.price_rub),
-      provenance: normalizeText(product.provenance),
-      quantity: normalizeNumber(product.quantity),
-      slug: normalizeText(product.slug),
-      status: normalizeText(product.status) || "draft",
-      title: normalizeText(product.title)
-    }));
-  } catch {
-    return [];
+    if (!data?.length) {
+      return { data: [], status: "empty" };
+    }
+
+    return {
+      data: data.map((product) => ({
+        artist_name: normalizeText(product.artist_name),
+        artist_slug: normalizeText(product.artist_slug),
+        category: normalizeText(product.category),
+        condition: normalizeText(product.condition) || "не указано",
+        delivery: normalizeText(product.delivery) || "доставка обсуждается",
+        description: normalizeText(product.description),
+        id: normalizeText(product.id),
+        image_url: product.image_url || null,
+        price_rub: normalizeNumber(product.price_rub),
+        provenance: normalizeText(product.provenance),
+        quantity: normalizeNumber(product.quantity),
+        slug: normalizeText(product.slug),
+        status: normalizeText(product.status) || "draft",
+        title: normalizeText(product.title)
+      })),
+      status: "ok"
+    };
+  } catch (error) {
+    console.error("Artist products load failed", error);
+    return { data: [], status: "error" };
   }
 }

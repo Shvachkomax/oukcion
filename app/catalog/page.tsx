@@ -119,11 +119,11 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         {result.status === "error" ? (
           <p className="emptyState">Не удалось загрузить каталог. Попробуйте обновить страницу.</p>
         ) : null}
-        {result.status === "empty" || products.length === 0 ? (
+        {result.status === "ok" && products.length === 0 ? (
           <p className="emptyState">Товаров не найдено. Попробуйте изменить фильтры.</p>
         ) : null}
 
-        {products.length > 0 ? (
+        {result.status === "ok" && products.length > 0 ? (
           <div className="cards productGrid">
             {products.map((product) => (
               <Link className="productCard productCardLink" key={product.id} href={`/products/${product.slug}`}>

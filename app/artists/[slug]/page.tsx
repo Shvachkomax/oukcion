@@ -17,10 +17,46 @@ export const revalidate = 60;
 
 export default async function ArtistPage({ params }: ArtistPageProps) {
   const { slug } = await params;
-  const [artist, products] = await Promise.all([
+  const [artistResult, productsResult] = await Promise.all([
     getArtistBySlug(slug),
     getPublishedProductsByArtistSlug(slug)
   ]);
+
+  if (artistResult.status === "error" || productsResult.status === "error") {
+    return (
+      <main>
+        <header className="topbar">
+          <Link className="brand" href="/" aria-label="Оукцион">
+            <span className="brandMark">О</span>
+            <span>Оукцион</span>
+          </Link>
+          <nav className="nav" aria-label="Основные разделы">
+            <Link href="/catalog">Каталог</Link>
+            <Link href="/#services">Услуги</Link>
+            <Link href="/#artists">Артисты</Link>
+            <Link href="/#auction">Аукцион</Link>
+            <Link href="/cabinet/artists">Продавцам</Link>
+          </nav>
+          <div className="headerActions">
+            <Link className="primaryButton" href="/catalog">
+              <Package size={17} />
+              Каталог
+            </Link>
+          </div>
+        </header>
+        <section className="section">
+          <p className="emptyState">Не удалось загрузить персону. Попробуйте обновить страницу.</p>
+          <Link href="/">
+            <ArrowLeft size={15} />
+            На главную
+          </Link>
+        </section>
+      </main>
+    );
+  }
+
+  const artist = artistResult.data;
+  const products = productsResult.data;
 
   if (!artist) {
     notFound();

@@ -66,10 +66,11 @@ function applyOrder(rows, order) {
 }
 
 function project(row, select) {
-  if (!select) return row;
+  if (!select || select === "*") return { ...row };
   const cols = select.split(",").map((s) => s.trim());
   const out = {};
   for (const c of cols) {
+    if (c === "*") { Object.assign(out, row); continue; }
     if (c.includes("->")) continue;
     out[c] = row[c] ?? null;
   }
@@ -126,6 +127,9 @@ const server = http.createServer(async (req, res) => {
   let rows = applyFilters(state[table], filters);
 
   if (req.method === "GET" || req.method === "HEAD") {
+    if (state.errorTables && state.errorTables.includes(table)) {
+      return json(500, { message: "internal error", code: "PGRST301" });
+    }
     rows = applyOrder(rows, q.order);
     if (q.limit) rows = rows.slice(0, Number(q.limit));
     const count = applyFilters(state[table], filters).length;
@@ -187,6 +191,25 @@ server.listen(PORT, () => {
   console.log(`SEED=${process.env.MOCK_SEED || "none"}`);
 });
 
+// Add control endpoints
+const control2 = http.createServer(async (req, res) => {
+  const url = new URL(req.url, "http://localhost:3002");
+  if (url.pathname === "/error") {
+    const data = JSON.parse(await body(req));
+    state.errorTables = data.tables || [];
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: true }));
+  }
+  if (url.pathname === "/clear") {
+    state.errorTables = [];
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ ok: true }));
+  }
+  res.writeHead(404);
+  res.end();
+});
+control2.listen(3003);
+
 // control endpoints for the harness
 const control = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost:3002");
@@ -211,3 +234,6 @@ const control = http.createServer(async (req, res) => {
   res.writeHead(404); res.end();
 });
 control.listen(3002, () => console.log("control on http://localhost:3002"));
+
+// Add control endpoints
+const origListen = server.listen;
