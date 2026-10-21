@@ -70,6 +70,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="productDetailPrice">{money.format(product.price_rub)}</p>
             <p className="productDetailMeta">
               <span>{product.quantity > 0 ? "В наличии" : "Нет в наличии"}</span>
+              <span>Остаток: {product.quantity} шт.</span>
               <span>Состояние: {product.condition}</span>
             </p>
 
