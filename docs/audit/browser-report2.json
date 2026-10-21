@@ -1,0 +1,673 @@
+{
+  "local": {
+    "badRes": [],
+    "fonts": {
+      "loaded": [
+        "__nextjs-Geist:unloaded",
+        "__nextjs-Geist Mono:unloaded",
+        "__nextjs-Geist:unloaded",
+        "__nextjs-Geist Mono:unloaded"
+      ],
+      "bodyFam": "Inter, \"Segoe UI\", system-ui, -apple-system, \"system-ui\", \"Helvetica Neue\", Arial, sans-serif",
+      "wDM": 122.046875,
+      "wInter": 122.046875,
+      "wMono": 122.046875,
+      "wSans": 137.125,
+      "fontsReady": "loaded"
+    },
+    "interactions": [
+      {
+        "i": 0,
+        "label": "|Поиск",
+        "clickErr": null,
+        "changed": false,
+        "before": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BODY"
+        },
+        "after": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BUTTON"
+        }
+      },
+      {
+        "i": 1,
+        "label": "Войти|",
+        "clickErr": null,
+        "changed": false,
+        "before": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BODY"
+        },
+        "after": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BUTTON"
+        }
+      },
+      {
+        "i": 2,
+        "label": "|Open Next.js Dev Tools",
+        "clickErr": null,
+        "changed": false,
+        "before": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BODY"
+        },
+        "after": {
+          "url": "http://localhost:3001/",
+          "html": 41438,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "NEXTJS-PORTAL"
+        }
+      }
+    ],
+    "cardProbe": [
+      {
+        "sel": ".productCard",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "Винил с автографомгруппа Северный светВинил с автографом18 5"
+      },
+      {
+        "sel": ".serviceItem",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "ВидеообращениеПоздравление до 90 секундот 35 000 ₽"
+      },
+      {
+        "sel": ".lotCard",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "из тура «Город огней»Сценический жакетСтавка420 000 ₽Ставок1"
+      },
+      {
+        "sel": ".featureLot",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "premiere lotТекущая ставка420 000 ₽Сценический жакет, 18 ста"
+      },
+      {
+        "sel": ".heroPanel",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "Live24 активных лотаpremiere lotТекущая ставка420 000 ₽Сцени"
+      }
+    ],
+    "anchorTest": [
+      {
+        "href": "#top",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "первый рынок - Россия, расчеты в RUBВещи",
+        "hiddenBehindStickyHeader": true
+      },
+      {
+        "href": "#shop",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "магазинМагазин: мерч, носители, книги, п",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#services",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "авторские услугиУслуги звёзд: обращения,",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционАукцион: личные вещи, костюмы, ин",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#seller",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "продавцамЗаявка продавца проходит провер",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционАукцион: личные вещи, костюмы, ин",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#shop",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "магазинМагазин: мерч, носители, книги, п",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционАукцион: личные вещи, костюмы, ин",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#top",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "первый рынок - Россия, расчеты в RUBВещи",
+        "hiddenBehindStickyHeader": true
+      }
+    ],
+    "contrast": [
+      {
+        "sel": "h1",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(0,0,0)",
+        "size": 136,
+        "bold": true,
+        "ratio": 17.57,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": "h2",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(0,0,0)",
+        "size": 58,
+        "bold": true,
+        "ratio": 17.57,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": "h3",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(243,234,216)",
+        "size": 25,
+        "bold": true,
+        "ratio": 1,
+        "need": 3,
+        "pass": false
+      },
+      {
+        "sel": ".nav a",
+        "fg": "rgba(243, 234, 216, 0.72)",
+        "bg": "rgb(7,6,4)",
+        "size": 14,
+        "bold": true,
+        "ratio": 16.95,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".primaryButton",
+        "fg": "rgb(7, 6, 4)",
+        "bg": "rgb(7,6,4)",
+        "size": 16,
+        "bold": true,
+        "ratio": 1,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": ".kicker",
+        "fg": "rgb(211, 164, 79)",
+        "bg": "rgb(0,0,0)",
+        "size": 12,
+        "bold": true,
+        "ratio": 9.19,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".statusGrid strong",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(243,234,216)",
+        "size": 21,
+        "bold": true,
+        "ratio": 1,
+        "need": 3,
+        "pass": false
+      },
+      {
+        "sel": ".statusGrid span",
+        "fg": "rgb(169, 152, 120)",
+        "bg": "rgb(243,234,216)",
+        "size": 12,
+        "bold": true,
+        "ratio": 2.36,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": ".cardBody p",
+        "fg": "rgb(169, 152, 120)",
+        "bg": "rgb(243,234,216)",
+        "size": 14,
+        "bold": false,
+        "ratio": 2.36,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": ".sectionHead a",
+        "fg": "rgb(211, 164, 79)",
+        "bg": "rgb(0,0,0)",
+        "size": 16,
+        "bold": true,
+        "ratio": 9.19,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".brand",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(7,6,4)",
+        "size": 21,
+        "bold": true,
+        "ratio": 16.95,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": ".eyebrow",
+        "fg": "rgb(211, 164, 79)",
+        "bg": "rgb(0,0,0)",
+        "size": 12,
+        "bold": true,
+        "ratio": 9.19,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": "dt",
+        "fg": "rgb(169, 152, 120)",
+        "bg": "rgb(243,234,216)",
+        "size": 12,
+        "bold": false,
+        "ratio": 2.36,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": "dd",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(243,234,216)",
+        "size": 15,
+        "bold": true,
+        "ratio": 1,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": ".steps li",
+        "fg": "rgb(243, 234, 216)",
+        "bg": "rgb(243,234,216)",
+        "size": 16,
+        "bold": false,
+        "ratio": 1,
+        "need": 4.5,
+        "pass": false
+      },
+      {
+        "sel": ".sellerCopy p",
+        "fg": "rgb(207, 192, 165)",
+        "bg": "rgb(0,0,0)",
+        "size": 16,
+        "bold": false,
+        "ratio": 11.74,
+        "need": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "prod": {
+    "badRes": [],
+    "fonts": {
+      "loaded": [],
+      "bodyFam": "\"DM Sans\", Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, Arial, sans-serif",
+      "wDM": 122.046875,
+      "wInter": 122.046875,
+      "wMono": 122.046875,
+      "wSans": 137.125,
+      "fontsReady": "loaded"
+    },
+    "interactions": [
+      {
+        "i": 0,
+        "label": "|Поиск",
+        "clickErr": null,
+        "changed": false,
+        "before": {
+          "url": "https://oukcion.vercel.app/",
+          "html": 33269,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BODY"
+        },
+        "after": {
+          "url": "https://oukcion.vercel.app/",
+          "html": 33269,
+          "dialogs": 0,
+          "inputs": 0,
+          "activeTag": "BUTTON"
+        }
+      }
+    ],
+    "cardProbe": [
+      {
+        "sel": ".productCard",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "Винил с автографомгруппа Северный светВинил с автографом18 5"
+      },
+      {
+        "sel": ".serviceItem",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "ВидеообращениеПоздравление до 90 секундот 35 000 ₽"
+      },
+      {
+        "sel": ".lotCard",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "лотиз тура «Город огней»Сценический жакетСтавка420 000 ₽Став"
+      },
+      {
+        "sel": ".featureLot",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "выбор редакцииТекущая ставка420 000 ₽Сценический жакет, 18 с"
+      },
+      {
+        "sel": ".heroPanel",
+        "cursor": "auto",
+        "pointerEvents": "auto",
+        "hasOnclickAttr": false,
+        "isLink": false,
+        "tabIndex": null,
+        "role": null,
+        "text": "аукцион дняLive24 активных лотавыбор редакцииТекущая ставка4"
+      }
+    ],
+    "anchorTest": [
+      {
+        "href": "#top",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "RUBпервый рынок - РоссияВещи, автографы ",
+        "hiddenBehindStickyHeader": true
+      },
+      {
+        "href": "#shop",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "магазинМерч, носители, книги, постеры и ",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#services",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "авторские услугиОбращения, мероприятия, ",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционЛичные вещи, костюмы, инструменты",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#seller",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "продавцамЗаявка продавца проходит провер",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционЛичные вещи, костюмы, инструменты",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#shop",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "магазинМерч, носители, книги, постеры и ",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#auction",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "аукционЛичные вещи, костюмы, инструменты",
+        "hiddenBehindStickyHeader": false
+      },
+      {
+        "href": "#top",
+        "exists": true,
+        "targetTag": "SECTION",
+        "targetText": "RUBпервый рынок - РоссияВещи, автографы ",
+        "hiddenBehindStickyHeader": true
+      }
+    ],
+    "contrast": [
+      {
+        "sel": "h1",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(244,244,245)",
+        "size": 64,
+        "bold": false,
+        "ratio": 18.1,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": "h2",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(244,244,245)",
+        "size": 56,
+        "bold": false,
+        "ratio": 18.1,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": "h3",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(255,255,255)",
+        "size": 20,
+        "bold": false,
+        "ratio": 19.9,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".nav a",
+        "fg": "rgb(63, 63, 70)",
+        "bg": "rgb(255,255,255)",
+        "size": 14,
+        "bold": false,
+        "ratio": 10.44,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".primaryButton",
+        "fg": "rgb(255, 255, 255)",
+        "bg": "rgb(9,9,11)",
+        "size": 14,
+        "bold": false,
+        "ratio": 19.9,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".kicker",
+        "fg": "rgb(82, 82, 91)",
+        "bg": "rgb(244,244,245)",
+        "size": 13,
+        "bold": false,
+        "ratio": 7.03,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".statusGrid strong",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(255,255,255)",
+        "size": 34,
+        "bold": false,
+        "ratio": 19.9,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": ".statusGrid span",
+        "fg": "rgb(82, 82, 91)",
+        "bg": "rgb(255,255,255)",
+        "size": 13,
+        "bold": false,
+        "ratio": 7.73,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".cardBody p",
+        "fg": "rgb(113, 113, 122)",
+        "bg": "rgb(255,255,255)",
+        "size": 14,
+        "bold": false,
+        "ratio": 4.83,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".sectionHead a",
+        "fg": "rgb(63, 63, 70)",
+        "bg": "rgb(244,244,245)",
+        "size": 14,
+        "bold": false,
+        "ratio": 9.5,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".brand",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(255,255,255)",
+        "size": 20,
+        "bold": true,
+        "ratio": 19.9,
+        "need": 3,
+        "pass": true
+      },
+      {
+        "sel": ".eyebrow",
+        "fg": "rgb(82, 82, 91)",
+        "bg": "rgb(244,244,245)",
+        "size": 13,
+        "bold": false,
+        "ratio": 7.03,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": "dt",
+        "fg": "rgb(113, 113, 122)",
+        "bg": "rgb(255,255,255)",
+        "size": 12,
+        "bold": false,
+        "ratio": 4.83,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": "dd",
+        "fg": "rgb(9, 9, 11)",
+        "bg": "rgb(255,255,255)",
+        "size": 14,
+        "bold": false,
+        "ratio": 19.9,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".steps li",
+        "fg": "rgb(24, 24, 27)",
+        "bg": "rgb(244,244,245)",
+        "size": 16,
+        "bold": false,
+        "ratio": 16.12,
+        "need": 4.5,
+        "pass": true
+      },
+      {
+        "sel": ".sellerCopy p",
+        "fg": "rgb(82, 82, 91)",
+        "bg": "rgb(255,255,255)",
+        "size": 15,
+        "bold": false,
+        "ratio": 7.73,
+        "need": 4.5,
+        "pass": true
+      }
+    ]
+  }
+}

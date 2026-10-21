@@ -1,0 +1,1035 @@
+{
+  "local": {
+    "desktop": {
+      "httpStatus": 200,
+      "finalUrl": "http://localhost:3001/",
+      "inventory": {
+        "links": [
+          {
+            "text": "ООукцион",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Услуги",
+            "href": "#services",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Продавцам",
+            "href": "#seller",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Смотреть аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Открыть магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукционные лоты",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Все категории",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          }
+        ],
+        "buttons": [
+          {
+            "text": "",
+            "aria": "Поиск",
+            "type": null,
+            "visible": true,
+            "disabled": false
+          },
+          {
+            "text": "Войти",
+            "aria": null,
+            "type": null,
+            "visible": true,
+            "disabled": false
+          }
+        ],
+        "inputs": [],
+        "forms": 0,
+        "imgs": [],
+        "sections": [
+          {
+            "cls": "hero",
+            "id": "top"
+          },
+          {
+            "cls": "statusGrid",
+            "id": ""
+          },
+          {
+            "cls": "section shopSection",
+            "id": "shop"
+          },
+          {
+            "cls": "section serviceBand",
+            "id": "services"
+          },
+          {
+            "cls": "section auctionSection",
+            "id": "auction"
+          },
+          {
+            "cls": "sellerSection",
+            "id": "seller"
+          }
+        ],
+        "overflow": 0,
+        "wide": [],
+        "smallTargets": [
+          {
+            "t": "ООукцион",
+            "h": 36,
+            "w": 135
+          },
+          {
+            "t": "Магазин",
+            "h": 19,
+            "w": 56
+          },
+          {
+            "t": "Услуги",
+            "h": 19,
+            "w": 43
+          },
+          {
+            "t": "Аукцион",
+            "h": 19,
+            "w": 57
+          },
+          {
+            "t": "Продавцам",
+            "h": 19,
+            "w": 76
+          },
+          {
+            "t": "Аукционные лоты",
+            "h": 21,
+            "w": 137
+          },
+          {
+            "t": "Все категории",
+            "h": 21,
+            "w": 106
+          }
+        ],
+        "bodyBg": "rgba(0, 0, 0, 0)",
+        "bodyFont": "Inter, \"Segoe UI\", system-ui, -apple-system, \"system-ui\", \"Helvetica Neue\", Arial, sans-serif",
+        "h1Font": "Georgia, \"Times New Roman\", serif",
+        "title": "Оукцион - магазин и аукцион публичных персон",
+        "lang": "ru",
+        "metaViewport": "width=device-width, initial-scale=1",
+        "h1s": [
+          "Вещи с историей"
+        ],
+        "headings": [
+          "H1:Вещи с историей",
+          "H2:Магазин: мерч, носители, книги, постеры и автограф",
+          "H3:Винил с автографом",
+          "H3:Постер тура 2024",
+          "H3:Индивидуальный автограф",
+          "H2:Услуги звёзд: обращения, мероприятия, встречи и ин",
+          "H3:Видеообращение",
+          "H3:Онлайн-встреча",
+          "H3:Рекламная интеграция",
+          "H2:Аукцион: личные вещи, костюмы, инструменты и редки",
+          "H3:Сценический жакет",
+          "H3:Студийный микрофон",
+          "H3:Подписанная книга",
+          "H2:Заявка продавца проходит проверку и модерацию"
+        ],
+        "imgCount": 0,
+        "svgs": 16
+      },
+      "interactions": [
+        {
+          "idx": 0,
+          "label": "|Поиск",
+          "clickError": null,
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        },
+        {
+          "idx": 1,
+          "label": "Войти|",
+          "clickError": "Error: elementHandle.click: Element is not attached to the DOM",
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        },
+        {
+          "idx": 2,
+          "label": "|Open Next.js Dev Tools",
+          "clickError": "Error: elementHandle.click: Element is not attached to the DOM",
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        }
+      ],
+      "focusInfo": {
+        "tag": "A",
+        "text": "ООукцион",
+        "outline": "rgb(0, 95, 204) auto 1px",
+        "outlineWidth": "1px",
+        "boxShadow": "none",
+        "hasFocusStyle": true
+      },
+      "anchorCheck": [
+        {
+          "href": "#top",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#services",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#seller",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#top",
+          "targetExists": true
+        }
+      ],
+      "consoleMsgs": [
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        }
+      ],
+      "pageErrors": [],
+      "failedReqs": []
+    },
+    "mobile": {
+      "httpStatus": 200,
+      "finalUrl": "http://localhost:3001/",
+      "inventory": {
+        "links": [
+          {
+            "text": "ООукцион",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Услуги",
+            "href": "#services",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Продавцам",
+            "href": "#seller",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Смотреть аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Открыть магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукционные лоты",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Все категории",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          }
+        ],
+        "buttons": [
+          {
+            "text": "",
+            "aria": "Поиск",
+            "type": null,
+            "visible": true,
+            "disabled": false
+          },
+          {
+            "text": "Войти",
+            "aria": null,
+            "type": null,
+            "visible": true,
+            "disabled": false
+          }
+        ],
+        "inputs": [],
+        "forms": 0,
+        "imgs": [],
+        "sections": [
+          {
+            "cls": "hero",
+            "id": "top"
+          },
+          {
+            "cls": "statusGrid",
+            "id": ""
+          },
+          {
+            "cls": "section shopSection",
+            "id": "shop"
+          },
+          {
+            "cls": "section serviceBand",
+            "id": "services"
+          },
+          {
+            "cls": "section auctionSection",
+            "id": "auction"
+          },
+          {
+            "cls": "sellerSection",
+            "id": "seller"
+          }
+        ],
+        "overflow": 0,
+        "wide": [],
+        "smallTargets": [
+          {
+            "t": "ООукцион",
+            "h": 36,
+            "w": 346
+          },
+          {
+            "t": "Магазин",
+            "h": 19,
+            "w": 56
+          },
+          {
+            "t": "Услуги",
+            "h": 19,
+            "w": 43
+          },
+          {
+            "t": "Аукцион",
+            "h": 19,
+            "w": 57
+          },
+          {
+            "t": "Продавцам",
+            "h": 19,
+            "w": 76
+          },
+          {
+            "t": "Аукционные лоты",
+            "h": 21,
+            "w": 137
+          },
+          {
+            "t": "Все категории",
+            "h": 21,
+            "w": 106
+          }
+        ],
+        "bodyBg": "rgba(0, 0, 0, 0)",
+        "bodyFont": "Inter, \"Segoe UI\", system-ui, -apple-system, \"system-ui\", \"Helvetica Neue\", Arial, sans-serif",
+        "h1Font": "Georgia, \"Times New Roman\", serif",
+        "title": "Оукцион - магазин и аукцион публичных персон",
+        "lang": "ru",
+        "metaViewport": "width=device-width, initial-scale=1",
+        "h1s": [
+          "Вещи с историей"
+        ],
+        "headings": [
+          "H1:Вещи с историей",
+          "H2:Магазин: мерч, носители, книги, постеры и автограф",
+          "H3:Винил с автографом",
+          "H3:Постер тура 2024",
+          "H3:Индивидуальный автограф",
+          "H2:Услуги звёзд: обращения, мероприятия, встречи и ин",
+          "H3:Видеообращение",
+          "H3:Онлайн-встреча",
+          "H3:Рекламная интеграция",
+          "H2:Аукцион: личные вещи, костюмы, инструменты и редки",
+          "H3:Сценический жакет",
+          "H3:Студийный микрофон",
+          "H3:Подписанная книга",
+          "H2:Заявка продавца проходит проверку и модерацию"
+        ],
+        "imgCount": 0,
+        "svgs": 16
+      },
+      "interactions": [
+        {
+          "idx": 0,
+          "label": "|Поиск",
+          "clickError": null,
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        },
+        {
+          "idx": 1,
+          "label": "Войти|",
+          "clickError": "Error: elementHandle.click: Element is not attached to the DOM",
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        },
+        {
+          "idx": 2,
+          "label": "|Open Next.js Dev Tools",
+          "clickError": "Error: elementHandle.click: Element is not attached to the DOM",
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        }
+      ],
+      "focusInfo": {
+        "tag": "A",
+        "text": "ООукцион",
+        "outline": "rgb(0, 95, 204) auto 1px",
+        "outlineWidth": "1px",
+        "boxShadow": "none",
+        "hasFocusStyle": true
+      },
+      "anchorCheck": [
+        {
+          "href": "#top",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#services",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#seller",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#top",
+          "targetExists": true
+        }
+      ],
+      "consoleMsgs": [
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+        },
+        {
+          "type": "log",
+          "text": "[HMR] connected"
+        }
+      ],
+      "pageErrors": [],
+      "failedReqs": []
+    }
+  },
+  "prod": {
+    "desktop": {
+      "httpStatus": 200,
+      "finalUrl": "https://oukcion.vercel.app/",
+      "inventory": {
+        "links": [
+          {
+            "text": "ООукцион",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Услуги",
+            "href": "#services",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Продавцам",
+            "href": "#seller",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Войти",
+            "href": "/cabinet/artists",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Смотреть аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Открыть магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукционные лоты",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Все категории",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          }
+        ],
+        "buttons": [
+          {
+            "text": "",
+            "aria": "Поиск",
+            "type": null,
+            "visible": true,
+            "disabled": false
+          }
+        ],
+        "inputs": [],
+        "forms": 0,
+        "imgs": [],
+        "sections": [
+          {
+            "cls": "hero",
+            "id": "top"
+          },
+          {
+            "cls": "statusGrid",
+            "id": ""
+          },
+          {
+            "cls": "section shopSection",
+            "id": "shop"
+          },
+          {
+            "cls": "section serviceBand",
+            "id": "services"
+          },
+          {
+            "cls": "section auctionSection",
+            "id": "auction"
+          },
+          {
+            "cls": "sellerSection",
+            "id": "seller"
+          }
+        ],
+        "overflow": 0,
+        "wide": [],
+        "smallTargets": [
+          {
+            "t": "ООукцион",
+            "h": 38,
+            "w": 155
+          },
+          {
+            "t": "Магазин",
+            "h": 34,
+            "w": 82
+          },
+          {
+            "t": "Услуги",
+            "h": 34,
+            "w": 70
+          },
+          {
+            "t": "Аукцион",
+            "h": 34,
+            "w": 81
+          },
+          {
+            "t": "Продавцам",
+            "h": 34,
+            "w": 101
+          }
+        ],
+        "bodyBg": "rgb(244, 244, 245)",
+        "bodyFont": "\"DM Sans\", Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, Arial, sans-serif",
+        "h1Font": "\"DM Sans\", Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, Arial, sans-serif",
+        "title": "Оукцион - магазин и аукцион публичных персон",
+        "lang": "ru",
+        "metaViewport": "width=device-width, initial-scale=1",
+        "h1s": [
+          "Вещи, автографы и впечатления публичных людей"
+        ],
+        "headings": [
+          "H1:Вещи, автографы и впечатления публичных людей",
+          "H2:Мерч, носители, книги, постеры и автографы",
+          "H3:Винил с автографом",
+          "H3:Постер тура 2024",
+          "H3:Индивидуальный автограф",
+          "H2:Обращения, мероприятия, встречи и интеграции",
+          "H3:Видеообращение",
+          "H3:Онлайн-встреча",
+          "H3:Рекламная интеграция",
+          "H2:Личные вещи, костюмы, инструменты и редкие издания",
+          "H3:Сценический жакет",
+          "H3:Студийный микрофон",
+          "H3:Подписанная книга",
+          "H2:Заявка продавца проходит проверку и модерацию"
+        ],
+        "imgCount": 0,
+        "svgs": 14
+      },
+      "interactions": [
+        {
+          "idx": 0,
+          "label": "|Поиск",
+          "clickError": null,
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        }
+      ],
+      "focusInfo": {
+        "tag": "A",
+        "text": "ООукцион",
+        "outline": "rgb(0, 95, 204) auto 1px",
+        "outlineWidth": "1px",
+        "boxShadow": "none",
+        "hasFocusStyle": true
+      },
+      "anchorCheck": [
+        {
+          "href": "#top",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#services",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#seller",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#top",
+          "targetExists": true
+        }
+      ],
+      "consoleMsgs": [
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "pageErrors": [],
+      "failedReqs": []
+    },
+    "mobile": {
+      "httpStatus": 200,
+      "finalUrl": "https://oukcion.vercel.app/",
+      "inventory": {
+        "links": [
+          {
+            "text": "ООукцион",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Услуги",
+            "href": "#services",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Продавцам",
+            "href": "#seller",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Войти",
+            "href": "/cabinet/artists",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Смотреть аукцион",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Открыть магазин",
+            "href": "#shop",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Аукционные лоты",
+            "href": "#auction",
+            "target": null,
+            "visible": true
+          },
+          {
+            "text": "Все категории",
+            "href": "#top",
+            "target": null,
+            "visible": true
+          }
+        ],
+        "buttons": [
+          {
+            "text": "",
+            "aria": "Поиск",
+            "type": null,
+            "visible": true,
+            "disabled": false
+          }
+        ],
+        "inputs": [],
+        "forms": 0,
+        "imgs": [],
+        "sections": [
+          {
+            "cls": "hero",
+            "id": "top"
+          },
+          {
+            "cls": "statusGrid",
+            "id": ""
+          },
+          {
+            "cls": "section shopSection",
+            "id": "shop"
+          },
+          {
+            "cls": "section serviceBand",
+            "id": "services"
+          },
+          {
+            "cls": "section auctionSection",
+            "id": "auction"
+          },
+          {
+            "cls": "sellerSection",
+            "id": "seller"
+          }
+        ],
+        "overflow": 0,
+        "wide": [],
+        "smallTargets": [
+          {
+            "t": "ООукцион",
+            "h": 34,
+            "w": 340
+          },
+          {
+            "t": "Магазин",
+            "h": 32,
+            "w": 78
+          },
+          {
+            "t": "Услуги",
+            "h": 32,
+            "w": 66
+          },
+          {
+            "t": "Аукцион",
+            "h": 32,
+            "w": 77
+          },
+          {
+            "t": "Продавцам",
+            "h": 32,
+            "w": 97
+          }
+        ],
+        "bodyBg": "rgb(244, 244, 245)",
+        "bodyFont": "\"DM Sans\", Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, Arial, sans-serif",
+        "h1Font": "\"DM Sans\", Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, Arial, sans-serif",
+        "title": "Оукцион - магазин и аукцион публичных персон",
+        "lang": "ru",
+        "metaViewport": "width=device-width, initial-scale=1",
+        "h1s": [
+          "Вещи, автографы и впечатления публичных людей"
+        ],
+        "headings": [
+          "H1:Вещи, автографы и впечатления публичных людей",
+          "H2:Мерч, носители, книги, постеры и автографы",
+          "H3:Винил с автографом",
+          "H3:Постер тура 2024",
+          "H3:Индивидуальный автограф",
+          "H2:Обращения, мероприятия, встречи и интеграции",
+          "H3:Видеообращение",
+          "H3:Онлайн-встреча",
+          "H3:Рекламная интеграция",
+          "H2:Личные вещи, костюмы, инструменты и редкие издания",
+          "H3:Сценический жакет",
+          "H3:Студийный микрофон",
+          "H3:Подписанная книга",
+          "H2:Заявка продавца проходит проверку и модерацию"
+        ],
+        "imgCount": 0,
+        "svgs": 14
+      },
+      "interactions": [
+        {
+          "idx": 0,
+          "label": "|Поиск",
+          "clickError": null,
+          "urlChanged": false,
+          "htmlChanged": false,
+          "modalBefore": 0,
+          "modalAfter": 0,
+          "overflowChanged": false
+        }
+      ],
+      "focusInfo": {
+        "tag": "A",
+        "text": "ООукцион",
+        "outline": "rgb(0, 95, 204) auto 1px",
+        "outlineWidth": "1px",
+        "boxShadow": "none",
+        "hasFocusStyle": true
+      },
+      "anchorCheck": [
+        {
+          "href": "#top",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#services",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#seller",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#shop",
+          "targetExists": true
+        },
+        {
+          "href": "#auction",
+          "targetExists": true
+        },
+        {
+          "href": "#top",
+          "targetExists": true
+        }
+      ],
+      "consoleMsgs": [],
+      "pageErrors": [],
+      "failedReqs": []
+    }
+  }
+}

@@ -59,7 +59,8 @@ textarea {
 
 main {
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   padding: 0 clamp(16px, 4vw, 40px) 64px;
 }
 
@@ -1131,6 +1132,36 @@ dd {
   line-height: 1.45;
 }
 
+.demoNotice {
+  align-items: center;
+  color: var(--color-fog);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 10px;
+  line-height: 1.45;
+  margin: 0 0 18px;
+  max-width: 760px;
+}
+
+.demoNotice.inverted {
+  color: rgba(255, 255, 255, 0.72);
+  margin: 20px 0 0;
+}
+
+.demoBadge {
+  background: rgba(212, 175, 55, 0.16);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  border-radius: 999px;
+  color: #d4af37;
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
 .cabinetRows p {
   color: var(--color-steel);
   font-size: 14px;
@@ -1183,20 +1214,40 @@ dd {
 @media (max-width: 640px) {
   main {
     padding-bottom: 32px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
-  .brand {
-    font-size: 18px;
-    padding-left: 14px;
-  }
-
-  .brandMark {
-    height: 34px;
-    width: 34px;
+  .topbar {
+    align-items: center;
+    column-gap: 10px;
+    grid-template-columns: auto auto;
+    row-gap: 8px;
   }
 
   .nav {
+    grid-column: 1 / -1;
+    gap: 6px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 0 6px 2px;
     scrollbar-width: none;
+  }
+
+  .nav a {
+    font-size: 13px;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
+  .brand {
+    font-size: 17px;
+    padding-left: 8px;
+  }
+
+  .brandMark {
+    height: 32px;
+    width: 32px;
   }
 
   .nav::-webkit-scrollbar {
@@ -1204,12 +1255,19 @@ dd {
   }
 
   .headerActions {
-    padding-right: 14px;
+    gap: 8px;
+    padding-right: 8px;
   }
 
   .primaryButton {
     font-size: 0;
-    padding: 0 12px;
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .iconButton {
+    min-height: 38px;
+    min-width: 38px;
   }
 
   h1 {

@@ -99,10 +99,19 @@ const sellerSteps = [
 export const revalidate = 60;
 
 export default async function Home() {
-  const [artists, publishedProducts] = await Promise.all([
+  const [artistsResult, productsResult] = await Promise.all([
     getFeaturedArtists(),
     getPublishedProducts()
   ]);
+
+  const artists = artistsResult.data;
+  const publishedProducts = productsResult.data;
+  const loadStatus =
+    artistsResult.status === "error" || productsResult.status === "error"
+      ? "error"
+      : artists.length === 0 && publishedProducts.length === 0
+        ? "empty"
+        : "ok";
 
   return (
     <main>
@@ -116,10 +125,10 @@ export default async function Home() {
           <a href="#services">Услуги</a>
           {artists.length > 0 ? <a href="#artists">Артисты</a> : null}
           <a href="#auction">Аукцион</a>
-          <a href="#seller">Продавцам</a>
+          <a href="/cabinet/artists">Продавцам</a>
         </nav>
         <div className="headerActions">
-          <button className="iconButton" aria-label="Поиск">
+          <button className="iconButton" aria-label="Поиск (скоро)" title="Поиск появится позже" disabled>
             <Search size={18} />
           </button>
           <a className="primaryButton" href="/cabinet/artists">
@@ -138,8 +147,7 @@ export default async function Home() {
           <h1>Вещи, автографы и впечатления публичных людей</h1>
           <p>
             Проверенные лоты, мерч и авторские услуги в одной аккуратной
-            витрине: без шума маркетплейса, с модерацией продавцов и прозрачной
-            историей предметов.
+            витрине: без шума маркетплейса. История и публикация предметов описываются в карточке.
           </p>
           <div className="heroActions">
             <a className="primaryLink" href="#auction">
@@ -155,17 +163,17 @@ export default async function Home() {
         <aside className="heroPanel" aria-label="Сводка торгов">
           <div className="heroPanelLabel">аукцион дня</div>
           <div className="liveHeader">
-            <span>Live</span>
-            <strong>24 активных лота</strong>
+            <span>Аукцион</span>
+            <strong>Торги в разработке</strong>
           </div>
           <div className="featureLot">
             <div className="featureArt">
-              <span>выбор редакции</span>
+              <span>демонстрационный блок</span>
             </div>
             <div className="featureCopy">
-              <p>Текущая ставка</p>
-              <strong>{money.format(420000)}</strong>
-              <small>Сценический жакет, 18 ставок</small>
+              <p>Статус</p>
+              <strong>Скоро</strong>
+              <small>Аукционный модуль будет подключён позже</small>
             </div>
           </div>
           <div className="trustStrip">
@@ -178,6 +186,36 @@ export default async function Home() {
           </div>
         </aside>
       </section>
+
+      {loadStatus === "error" ? (
+        <section className="section" aria-live="polite">
+          <div className="sectionHead">
+            <div>
+              <span className="kicker">Витрина</span>
+              <h2>Не удалось загрузить данные</h2>
+            </div>
+          </div>
+          <p className="emptyState">
+            Сейчас не получается получить список публикаций. Попробуйте обновить
+            страницу чуть позже.
+          </p>
+        </section>
+      ) : null}
+
+      {loadStatus === "empty" ? (
+        <section className="section" aria-live="polite">
+          <div className="sectionHead">
+            <div>
+              <span className="kicker">Витрина</span>
+              <h2>Пока нет публикаций</h2>
+            </div>
+          </div>
+          <p className="emptyState">
+            Подключение к базе работает, но опубликованных артистов и товаров
+            пока нет. Первые позиции появятся здесь после заполнения кабинета.
+          </p>
+        </section>
+      ) : null}
 
       <section className="statusGrid" aria-label="Ключевая информация">
         <div>
@@ -192,8 +230,8 @@ export default async function Home() {
         </div>
         <div>
           <span>Модерация</span>
-          <strong>4 этапа</strong>
-          <p>Заявка, проверка, описание лота и публикация.</p>
+          <strong>планируется</strong>
+          <p>Процесс модерации настраивается. Сейчас карточки публикуются через кабинет оператора.</p>
         </div>
       </section>
 
@@ -206,8 +244,8 @@ export default async function Home() {
               </span>
               <h2>Карточка артиста собирает доверие, товары и услуги</h2>
             </div>
-            <a href="#seller">
-              Стать продавцом
+            <a href="/cabinet/artists">
+              Вход для оператора
               <ArrowRight size={15} />
             </a>
           </div>
@@ -297,6 +335,11 @@ export default async function Home() {
             <ArrowRight size={15} />
           </a>
         </div>
+        <p className="demoNotice">
+          <span className="demoBadge">демо</span>
+          Пример оформления витрины. Реальные позиции появляются из кабинета
+          продавца и помечены как опубликованные.
+        </p>
         <div className="cards productGrid">
           {shopItems.map((item) => (
             <article className="productCard" key={item.title}>
@@ -339,6 +382,11 @@ export default async function Home() {
               );
             })}
           </div>
+          <p className="demoNotice inverted">
+            <span className="demoBadge">демо</span>
+            Примеры формата услуг и ориентировочные цены. Продажа услуг
+            включается вместе с публикацией карточек.
+          </p>
         </div>
       </section>
 
@@ -355,6 +403,11 @@ export default async function Home() {
             <ArrowRight size={15} />
           </a>
         </div>
+        <p className="demoNotice">
+          <span className="demoBadge">демо</span>
+          Аукционный модуль в разработке. Ниже — макет карточки лота; ставки и
+          таймеры пока не работают и не являются реальными торгами.
+        </p>
         <div className="cards lotGrid">
           {lots.map((lot) => (
             <article className="lotCard" key={lot.title}>

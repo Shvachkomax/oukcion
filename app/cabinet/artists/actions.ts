@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -22,6 +22,160 @@ function getAccessCookieValue() {
     .update(`oukcion-cabinet:${process.env.CABINET_ACCESS_CODE}`)
     .digest("hex");
 }
+
+// Ограничение попыток входа в кабинет оператора.
+//
+// Основное хранилище счётчика — таблица cabinet_login_attempts в Postgres:
+// serverless-инстансы Vercel не разделяют память, поэтому счётчик в памяти
+// обнуляется между запросами. Если таблица недоступна (миграция ещё не
+// применена), используется запасной счётчик в памяти процесса — он слабее,
+// но лучше, чем полное отсутствие ограничения.
+const LOGIN_WINDOW_MINUTES = 15;
+const LOGIN_MAX_ATTEMPTS = 10;
+const LOGIN_LOCK_MINUTES = 15;
+
+type LoginAttemptState = {
+  count: number;
+  firstAttemptAt: number;
+  lockedUntil: number;
+};
+
+const memoryAttempts = new Map<string, LoginAttemptState>();
+
+async function getClientKey(): Promise<string> {
+  try {
+    const h = await headers();
+    
+    // Vercel sets x-vercel-forwarded-for as trusted header (from Vercel's proxy)
+    // On Vercel, this is the real client IP and cannot be spoofed by end users
+    const vercelIp = h.get("x-vercel-forwarded-for");
+    if (vercelIp && process.env.VERCEL) {
+      const ip = vercelIp.split(",")[0].trim();
+      if (ip) return `ip:${ip}`;
+    }
+    
+    // x-real-ip is set by some proxies (nginx)
+    const realIp = h.get("x-real-ip");
+    if (realIp && process.env.VERCEL) {
+      return `ip:${realIp.trim()}`;
+    }
+    
+    // Only trust x-forwarded-for on Vercel (behind trusted proxy)
+    // On local/dev, use it but log warning in production would be needed
+    const forwarded = h.get("x-forwarded-for");
+    if (forwarded && process.env.VERCEL) {
+      const ip = forwarded.split(",")[0].trim();
+      if (ip) return `ip:${ip}`;
+    }
+    
+    // Local development - still use headers but this is not production-safe
+    if (process.env.NODE_ENV !== "production") {
+      if (vercelIp) {
+        const ip = vercelIp.split(",")[0].trim();
+        if (ip) return `ip:${ip}`;
+      }
+      if (realIp) {
+        return `ip:${realIp.trim()}`;
+      }
+      if (forwarded) {
+        const ip = forwarded.split(",")[0].trim();
+        if (ip) return `ip:${ip}`;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return "ip:unknown";
+}
+
+function memoryCheck(key: string): { allowed: boolean; remaining: number } {
+  const now = Date.now();
+  const rec = memoryAttempts.get(key);
+
+  if (!rec) {
+    memoryAttempts.set(key, {
+      count: 1,
+      firstAttemptAt: now,
+      lockedUntil: 0
+    });
+    return { allowed: true, remaining: LOGIN_MAX_ATTEMPTS - 1 };
+  }
+
+  if (rec.lockedUntil > now) {
+    return { allowed: false, remaining: 0 };
+  }
+
+  const windowExpired = rec.firstAttemptAt < now - LOGIN_WINDOW_MINUTES * 60_000;
+  const nextCount = windowExpired ? 1 : rec.count + 1;
+  const reachedLimit = nextCount >= LOGIN_MAX_ATTEMPTS;
+
+  memoryAttempts.set(key, {
+    count: nextCount,
+    firstAttemptAt: windowExpired ? now : rec.firstAttemptAt,
+    lockedUntil: reachedLimit ? now + LOGIN_LOCK_MINUTES * 60_000 : 0
+  });
+
+  if (reachedLimit) {
+    return { allowed: false, remaining: 0 };
+  }
+
+  return { allowed: true, remaining: LOGIN_MAX_ATTEMPTS - nextCount };
+}
+
+async function dbCheck(key: string): Promise<{ allowed: boolean; remaining: number } | null> {
+  if (!supabaseAdmin) {
+    return null;
+  }
+
+  // Use atomic RPC function to prevent race conditions between parallel requests
+  const { data, error } = await supabaseAdmin.rpc("check_cabinet_login_rate_limit", {
+    p_client_key: key
+  });
+
+  if (error) {
+    // If RPC doesn't exist (migration not applied), fall back to per-instance limiter
+    console.error("Rate limit RPC failed, using fallback:", error.message);
+    return null;
+  }
+
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return null;
+  }
+
+  const result = data[0] as { allowed: boolean; remaining: number; locked: boolean };
+  return { allowed: result.allowed, remaining: result.remaining };
+}
+
+async function checkLoginRateLimit(
+  key: string
+): Promise<{ allowed: boolean; remaining: number }> {
+  const dbResult = await dbCheck(key);
+  if (dbResult) {
+    return dbResult;
+  }
+  return memoryCheck(key);
+}
+
+async function resetLoginRateLimit(key: string): Promise<void> {
+  memoryAttempts.delete(key);
+  if (!supabaseAdmin) {
+    return;
+  }
+  try {
+    await supabaseAdmin.rpc("reset_cabinet_login_rate_limit", { p_client_key: key });
+  } catch {
+    try {
+      await supabaseAdmin.from("cabinet_login_attempts").delete().eq("client_key", key);
+    } catch {
+      // ignore
+    }
+  }
+}
+
+function rateLimited(): never {
+  redirect("/cabinet/artists?error=rate-limited");
+}
+
 
 function slugify(value: string) {
   return value
@@ -129,6 +283,12 @@ export async function isCabinetAllowed() {
 }
 
 export async function loginToCabinet(formData: FormData) {
+  const clientKey = await getClientKey();
+  const rate = await checkLoginRateLimit(clientKey);
+  if (!rate.allowed) {
+    rateLimited();
+  }
+
   const accessCode = getString(formData, "accessCode");
 
   if (!process.env.CABINET_ACCESS_CODE) {
@@ -138,6 +298,8 @@ export async function loginToCabinet(formData: FormData) {
   if (accessCode !== process.env.CABINET_ACCESS_CODE) {
     redirect("/cabinet/artists?error=wrong-code");
   }
+
+  await resetLoginRateLimit(clientKey);
 
   const cookieStore = await cookies();
   cookieStore.set(accessCookieName, getAccessCookieValue(), {
@@ -155,6 +317,11 @@ export async function saveArtist(
   _previousState: ArtistFormState,
   formData: FormData
 ): Promise<ArtistFormState> {
+  const allowed = await isCabinetAllowed();
+  if (!allowed) {
+    redirect("/cabinet/artists?error=unauthorized");
+  }
+
   if (!(await isCabinetAllowed())) {
     return {
       message: "Сначала введите код доступа.",
@@ -241,6 +408,11 @@ export async function savePhysicalProduct(
   _previousState: ProductFormState,
   formData: FormData
 ): Promise<ProductFormState> {
+  const allowed = await isCabinetAllowed();
+  if (!allowed) {
+    redirect("/cabinet/artists?error=unauthorized");
+  }
+
   try {
     if (!(await isCabinetAllowed())) {
       return {
@@ -350,6 +522,11 @@ export async function savePhysicalProduct(
 }
 
 export async function deleteArtist(formData: FormData) {
+  const allowed = await isCabinetAllowed();
+  if (!allowed) {
+    redirect("/cabinet/artists?error=unauthorized");
+  }
+
   if (!(await isCabinetAllowed())) {
     redirect("/cabinet/artists?error=not-allowed");
   }
@@ -392,6 +569,11 @@ export async function deleteArtist(formData: FormData) {
 }
 
 export async function deletePhysicalProduct(formData: FormData) {
+  const allowed = await isCabinetAllowed();
+  if (!allowed) {
+    redirect("/cabinet/artists?error=unauthorized");
+  }
+
   if (!(await isCabinetAllowed())) {
     redirect("/cabinet/artists?error=not-allowed");
   }

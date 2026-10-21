@@ -1,0 +1,278 @@
+{
+  "prod-cabinet": {
+    "desktop": {
+      "status": 200,
+      "errs": [],
+      "focusables": 4,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [],
+      "navTop": null,
+      "navHeight": null,
+      "topbarHeight": null,
+      "small": [
+        {
+          "t": "На сайт",
+          "h": 17,
+          "w": 77
+        }
+      ],
+      "inputs": 2,
+      "forms": 1,
+      "buttons": 1,
+      "links": 1,
+      "h1": "Вход в кабинет",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 900
+    },
+    "mobile": {
+      "status": 200,
+      "errs": [],
+      "focusables": 4,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [],
+      "navTop": null,
+      "navHeight": null,
+      "topbarHeight": null,
+      "small": [
+        {
+          "t": "На сайт",
+          "h": 17,
+          "w": 77
+        }
+      ],
+      "inputs": 2,
+      "forms": 1,
+      "buttons": 1,
+      "links": 1,
+      "h1": "Вход в кабинет",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 844
+    }
+  },
+  "prod-home": {
+    "desktop": {
+      "status": 200,
+      "errs": [],
+      "focusables": 11,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [
+        {
+          "t": "Магазин",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Услуги",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Аукцион",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Продавцам",
+          "visible": true,
+          "y": 21
+        }
+      ],
+      "navTop": 21,
+      "navHeight": 34,
+      "topbarHeight": 76,
+      "small": [],
+      "inputs": 0,
+      "forms": 0,
+      "buttons": 1,
+      "links": 10,
+      "h1": "Вещи, автографы и впечатления публичных людей",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 3290
+    },
+    "mobile": {
+      "status": 200,
+      "errs": [],
+      "focusables": 11,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [
+        {
+          "t": "Магазин",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Услуги",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Аукцион",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Продавцам",
+          "visible": true,
+          "y": 65
+        }
+      ],
+      "navTop": 65,
+      "navHeight": 34,
+      "topbarHeight": 172,
+      "small": [],
+      "inputs": 0,
+      "forms": 0,
+      "buttons": 1,
+      "links": 10,
+      "h1": "Вещи, автографы и впечатления публичных людей",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 6866
+    }
+  },
+  "local-mock-home": {
+    "desktop": {
+      "status": 200,
+      "errs": [],
+      "focusables": 11,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [
+        {
+          "t": "Магазин",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Услуги",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Аукцион",
+          "visible": true,
+          "y": 21
+        },
+        {
+          "t": "Продавцам",
+          "visible": true,
+          "y": 21
+        }
+      ],
+      "navTop": 21,
+      "navHeight": 34,
+      "topbarHeight": 76,
+      "small": [],
+      "inputs": 0,
+      "forms": 0,
+      "buttons": 1,
+      "links": 10,
+      "h1": "Вещи, автографы и впечатления публичных людей",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 3290
+    },
+    "mobile": {
+      "status": 200,
+      "errs": [],
+      "focusables": 11,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [
+        {
+          "t": "Магазин",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Услуги",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Аукцион",
+          "visible": true,
+          "y": 65
+        },
+        {
+          "t": "Продавцам",
+          "visible": true,
+          "y": 65
+        }
+      ],
+      "navTop": 65,
+      "navHeight": 34,
+      "topbarHeight": 172,
+      "small": [],
+      "inputs": 0,
+      "forms": 0,
+      "buttons": 1,
+      "links": 10,
+      "h1": "Вещи, автографы и впечатления публичных людей",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 6866
+    }
+  },
+  "local-mock-cabinet": {
+    "desktop": {
+      "status": 200,
+      "errs": [],
+      "focusables": 4,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [],
+      "navTop": null,
+      "navHeight": null,
+      "topbarHeight": null,
+      "small": [
+        {
+          "t": "На сайт",
+          "h": 17,
+          "w": 77
+        }
+      ],
+      "inputs": 2,
+      "forms": 1,
+      "buttons": 1,
+      "links": 1,
+      "h1": "Вход в кабинет",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 900
+    },
+    "mobile": {
+      "status": 200,
+      "errs": [],
+      "focusables": 4,
+      "hScroll": 0,
+      "overflowers": [],
+      "navLinks": [],
+      "navTop": null,
+      "navHeight": null,
+      "topbarHeight": null,
+      "small": [
+        {
+          "t": "На сайт",
+          "h": 17,
+          "w": 77
+        }
+      ],
+      "inputs": 2,
+      "forms": 1,
+      "buttons": 1,
+      "links": 1,
+      "h1": "Вход в кабинет",
+      "bodyFont": "\"DM Sans\"",
+      "bodyBg": "rgb(244, 244, 245)",
+      "docHeight": 844
+    }
+  }
+}
