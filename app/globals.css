@@ -1328,3 +1328,163 @@ dd {
     grid-template-columns: 1fr;
   }
 }
+
+/* Catalog & detail pages */
+.catalogSection { padding-top: 40px; }
+.catalogFilters {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr)) auto;
+  margin: 26px 0 30px;
+}
+.catalogSearch {
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  border-radius: 999px;
+  display: flex;
+  gap: 10px;
+  padding: 0 16px;
+}
+.catalogSearch input {
+  background: transparent;
+  border: 0;
+  color: var(--color-obsidian);
+  flex: 1;
+  font: inherit;
+  padding: 12px 0;
+}
+.catalogSearch input:focus { outline: none; }
+.catalogFilters select {
+  background: #fff;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  border-radius: 999px;
+  color: var(--color-obsidian);
+  font: inherit;
+  padding: 12px 18px;
+}
+
+.productCardLink,
+.artistCardLink,
+.artistProductCardLink {
+  color: inherit;
+  text-decoration: none;
+}
+.productCardLink:hover .productVisual span,
+.artistCardLink:hover .artistPortrait span,
+.artistProductCardLink:hover .artistProductImage span {
+  opacity: 0.9;
+}
+
+.breadcrumb { margin-bottom: 20px; }
+.breadcrumb a {
+  align-items: center;
+  color: var(--color-fog);
+  display: inline-flex;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.productDetailSection { padding-top: 40px; }
+.productDetailGrid {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+.productDetailImage {
+  align-items: flex-end;
+  background-color: #f3f3f3;
+  background-position: center;
+  background-size: cover;
+  border-radius: 28px;
+  display: flex;
+  min-height: 420px;
+  padding: 24px;
+}
+.productDetailImage span {
+  background: rgba(9, 9, 11, 0.8);
+  border-radius: 999px;
+  color: #fff;
+  padding: 8px 16px;
+}
+.productDetailInfo h1 { font-size: clamp(32px, 4vw, 56px); margin: 12px 0 16px; }
+.productDetailPrice { font-size: clamp(28px, 3vw, 38px); font-weight: 600; margin: 0 0 12px; }
+.productDetailMeta {
+  color: var(--color-fog);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0 0 24px;
+}
+.artistLink {
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  border-radius: 999px;
+  color: inherit;
+  display: inline-flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding: 10px 22px 10px 12px;
+  text-decoration: none;
+}
+.artistLink small { color: var(--color-fog); display: block; font-size: 12px; }
+.artistLink strong { display: block; }
+.productDetailBlock { margin-bottom: 24px; max-width: 620px; }
+.productDetailBlock h2 { font-size: 20px; margin: 0 0 10px; }
+.productDetailBlock p { color: var(--color-steel); line-height: 1.7; margin: 0; white-space: pre-wrap; }
+.productDetailNotice {
+  background: rgba(15, 15, 15, 0.02);
+  border-radius: 16px;
+  color: var(--color-fog);
+  margin-top: 30px;
+  padding: 16px 20px;
+}
+
+.artistDetailSection { padding-top: 40px; }
+.artistDetailHeader {
+  align-items: center;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  margin: 26px 0 40px;
+}
+.artistDetailPortrait {
+  align-items: center;
+  background-color: #f3f3f3;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+  color: var(--color-fog);
+  display: flex;
+  height: 220px;
+  justify-content: center;
+  width: 220px;
+}
+.artistDetailInfo h1 { font-size: clamp(32px, 4vw, 56px); margin: 12px 0 10px; }
+.artistDetailMeta { color: var(--color-fog); margin: 0 0 16px; }
+.artistDetailBio { color: var(--color-steel); line-height: 1.7; margin: 0 0 20px; max-width: 720px; }
+.artistDetailStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.artistDetailStats span { color: var(--color-fog); }
+.artistDetailStats strong { color: var(--color-obsidian); margin-right: 6px; }
+
+@media (max-width: 1080px) {
+  .catalogFilters {
+    grid-template-columns: 1fr;
+  }
+  .productDetailGrid {
+    grid-template-columns: 1fr;
+  }
+  .artistDetailHeader {
+    grid-template-columns: 1fr;
+  }
+  .artistDetailPortrait {
+    height: 180px;
+    width: 180px;
+  }
+}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
@@ -121,20 +122,20 @@ export default async function Home() {
           <span>Оукцион</span>
         </a>
         <nav className="nav" aria-label="Основные разделы">
-          <a href="#shop">Магазин</a>
+          <Link href="/catalog">Каталог</Link>
           <a href="#services">Услуги</a>
           {artists.length > 0 ? <a href="#artists">Артисты</a> : null}
           <a href="#auction">Аукцион</a>
           <a href="/cabinet/artists">Продавцам</a>
         </nav>
         <div className="headerActions">
-          <button className="iconButton" aria-label="Поиск (скоро)" title="Поиск появится позже" disabled>
+          <Link className="iconButton" href="/catalog" aria-label="Поиск по каталогу">
             <Search size={18} />
-          </button>
-          <a className="primaryButton" href="/cabinet/artists">
+          </Link>
+          <Link className="primaryButton" href="/cabinet/artists">
             <UserCheck size={17} />
             Войти
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -251,7 +252,7 @@ export default async function Home() {
           </div>
           <div className="artistGrid">
             {artists.map((artist) => (
-              <article className="artistCard" key={artist.slug}>
+              <Link className="artistCard artistCardLink" href={`/artists/${artist.slug}`} key={artist.slug}>
                 <div
                   className="artistPortrait"
                   style={{
@@ -284,7 +285,7 @@ export default async function Home() {
                     </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
           {publishedProducts.length > 0 ? (
@@ -295,7 +296,7 @@ export default async function Home() {
               </div>
               <div className="artistProductGrid">
                 {publishedProducts.map((product) => (
-                  <article className="artistProductCard" key={product.id}>
+                  <Link className="artistProductCard artistProductCardLink" href={`/products/${product.slug}`} key={product.id}>
                     <div
                       className="artistProductImage"
                       style={{
@@ -314,7 +315,7 @@ export default async function Home() {
                         <span>{product.quantity} шт.</span>
                       </div>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             </div>
