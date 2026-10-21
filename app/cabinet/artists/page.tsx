@@ -57,6 +57,18 @@ export default async function CabinetArtistsPage({
                 В Vercel не настроен CABINET_ACCESS_CODE.
               </p>
             ) : null}
+            {error === "rate-limited" ? (
+              <p className="formStatus error">
+                Слишком много попыток входа. Подождите 15 минут и попробуйте
+                снова.
+              </p>
+            ) : null}
+            {error === "rate-limiter-unavailable" ? (
+              <p className="formStatus error">
+                Вход временно недоступен: не работает защита от подбора кода.
+                Попробуйте позже.
+              </p>
+            ) : null}
           </form>
         </section>
       </main>

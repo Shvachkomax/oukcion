@@ -25,22 +25,13 @@ function getAccessCookieValue() {
 
 // Ограничение попыток входа в кабинет оператора.
 //
-// Основное хранилище счётчика — таблица cabinet_login_attempts в Postgres:
-// serverless-инстансы Vercel не разделяют память, поэтому счётчик в памяти
-// обнуляется между запросами. Если таблица недоступна (миграция ещё не
-// применена), используется запасной счётчик в памяти процесса — он слабее,
-// но лучше, чем полное отсутствие ограничения.
-const LOGIN_WINDOW_MINUTES = 15;
-const LOGIN_MAX_ATTEMPTS = 10;
-const LOGIN_LOCK_MINUTES = 15;
-
-type LoginAttemptState = {
-  count: number;
-  firstAttemptAt: number;
-  lockedUntil: number;
-};
-
-const memoryAttempts = new Map<string, LoginAttemptState>();
+// Единственный источник счётчика — общая таблица cabinet_login_attempts в
+// Postgres и SECURITY DEFINER функция check_cabinet_login_rate_limit.
+// Serverless-инстансы Vercel не разделят память, поэтому счётчик в памяти
+// процесса не является общей защитой: параллельные запросы к разным
+// инстансам его не увидят. Поэтому обходного in-memory счётчика нет — если
+// общий лимитер недоступен, вход отклоняется целиком (fail closed).
+const LOGIN_RATE_LIMIT_ERROR = "rate-limiter-unavailable";
 
 async function getClientKey(): Promise<string> {
   try {
@@ -88,92 +79,73 @@ async function getClientKey(): Promise<string> {
   return "ip:unknown";
 }
 
-function memoryCheck(key: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const rec = memoryAttempts.get(key);
+type RateLimitDecision =
+  | { ok: true; allowed: boolean; remaining: number }
+  | { ok: false };
 
-  if (!rec) {
-    memoryAttempts.set(key, {
-      count: 1,
-      firstAttemptAt: now,
-      lockedUntil: 0
-    });
-    return { allowed: true, remaining: LOGIN_MAX_ATTEMPTS - 1 };
-  }
-
-  if (rec.lockedUntil > now) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  const windowExpired = rec.firstAttemptAt < now - LOGIN_WINDOW_MINUTES * 60_000;
-  const nextCount = windowExpired ? 1 : rec.count + 1;
-  const reachedLimit = nextCount >= LOGIN_MAX_ATTEMPTS;
-
-  memoryAttempts.set(key, {
-    count: nextCount,
-    firstAttemptAt: windowExpired ? now : rec.firstAttemptAt,
-    lockedUntil: reachedLimit ? now + LOGIN_LOCK_MINUTES * 60_000 : 0
-  });
-
-  if (reachedLimit) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  return { allowed: true, remaining: LOGIN_MAX_ATTEMPTS - nextCount };
-}
-
-async function dbCheck(key: string): Promise<{ allowed: boolean; remaining: number } | null> {
+// Счётчик попыток живёт только в Postgres. Если общий лимитер недоступен
+// (нет service_role, RPC не применена или вернула ошибку), вход запрещается:
+// ослабленный локальный счётчик не защищает общие serverless-инстансы.
+async function dbCheck(key: string): Promise<RateLimitDecision> {
   if (!supabaseAdmin) {
-    return null;
+    console.error(
+      "Cabinet login rate limit unavailable: SUPABASE_SERVICE_ROLE_KEY is not configured"
+    );
+    return { ok: false };
   }
 
-  // Use atomic RPC function to prevent race conditions between parallel requests
   const { data, error } = await supabaseAdmin.rpc("check_cabinet_login_rate_limit", {
     p_client_key: key
   });
 
   if (error) {
-    // If RPC doesn't exist (migration not applied), fall back to per-instance limiter
-    console.error("Rate limit RPC failed, using fallback:", error.message);
-    return null;
+    console.error("Rate limit RPC failed, login is denied:", error.message);
+    return { ok: false };
   }
 
-  if (!data || !Array.isArray(data) || data.length === 0) {
-    return null;
+  if (!Array.isArray(data) || data.length === 0) {
+    console.error("Rate limit RPC returned an empty result, login is denied");
+    return { ok: false };
   }
 
-  const result = data[0] as { allowed: boolean; remaining: number; locked: boolean };
-  return { allowed: result.allowed, remaining: result.remaining };
+  const result = data[0] as { allowed?: unknown; remaining?: unknown } | null;
+
+  if (
+    !result ||
+    typeof result.allowed !== "boolean" ||
+    typeof result.remaining !== "number"
+  ) {
+    console.error("Rate limit RPC returned an unexpected result, login is denied");
+    return { ok: false };
+  }
+
+  return { ok: true, allowed: result.allowed, remaining: result.remaining };
 }
 
-async function checkLoginRateLimit(
-  key: string
-): Promise<{ allowed: boolean; remaining: number }> {
-  const dbResult = await dbCheck(key);
-  if (dbResult) {
-    return dbResult;
-  }
-  return memoryCheck(key);
+async function checkLoginRateLimit(key: string): Promise<RateLimitDecision> {
+  return dbCheck(key);
 }
 
 async function resetLoginRateLimit(key: string): Promise<void> {
-  memoryAttempts.delete(key);
   if (!supabaseAdmin) {
     return;
   }
-  try {
-    await supabaseAdmin.rpc("reset_cabinet_login_rate_limit", { p_client_key: key });
-  } catch {
-    try {
-      await supabaseAdmin.from("cabinet_login_attempts").delete().eq("client_key", key);
-    } catch {
-      // ignore
-    }
+
+  const { error } = await supabaseAdmin.rpc("reset_cabinet_login_rate_limit", {
+    p_client_key: key
+  });
+
+  if (error) {
+    console.error("Rate limit reset failed:", error.message);
   }
 }
 
 function rateLimited(): never {
   redirect("/cabinet/artists?error=rate-limited");
+}
+
+function rateLimiterUnavailable(): never {
+  redirect(`/cabinet/artists?error=${LOGIN_RATE_LIMIT_ERROR}`);
 }
 
 
@@ -285,6 +257,11 @@ export async function isCabinetAllowed() {
 export async function loginToCabinet(formData: FormData) {
   const clientKey = await getClientKey();
   const rate = await checkLoginRateLimit(clientKey);
+
+  if (!rate.ok) {
+    rateLimiterUnavailable();
+  }
+
   if (!rate.allowed) {
     rateLimited();
   }
