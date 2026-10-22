@@ -45,8 +45,16 @@ supabase login --token <СОЗДАННЫЙ_ТОКЕН>
 
 Токен не присылать в чат и не класть в Git. CLI сохранит его в связке ключей.
 
-Альтернатива: в Chrome открыт таб «Authorize CLI | Supabase» - нажатие
-Authorize даёт тот же результат.
+Альтернатива: в Chrome уже открыт таб «Authorize CLI | Supabase» - нажатие
+Authorize даёт тот же результат. Актуальная сессия на момент отчёта:
+
+```
+https://supabase.com/dashboard/cli/login?session_id=9102dc81-bbd1-4610-83c1-8044a5eace2f&token_name=cli_macintosh@Macintosh-2.local_1792630309&public_key=048ab1f852bedbb45ea60d9712d382772e493c4034df3b559deb6a59fc5fe9f2aa799402dc0ec6d24b038c318c21d4fed6355fccd0f702e54d792e08c60ff5e774
+```
+
+Сессия ждёт нажатия Authorize; после него CLI сохранит токен в связке ключей и
+`supabase projects list` заработает. Отозванный токен из связки ключей уже
+удалён, поэтому CLI сейчас честно сообщает «Access token not provided».
 
 ## 3. Что сделано
 
