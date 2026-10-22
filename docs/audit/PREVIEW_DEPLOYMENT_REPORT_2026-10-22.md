@@ -2,220 +2,223 @@
 
 Дата: 2026-10-22
 Ветка: `feature/catalog-product-pages`
-Локальный HEAD и remote HEAD: `d72f2b8`
+Локальный HEAD и remote HEAD: `b39b7a5`
 Проект Vercel: `maxim-shvachko-s-projects/oukcion` (`prj_JLR1FscDMoq1OgvSCqT0aWnVm7oK`)
 
 ## 1. Итог
 
 | Пункт | Состояние |
 |---|---|
-| Preview-деплой | `dpl_7AGmcHx46ags7g11nF1HF65ghPNg`, SHA `d72f2b86`, READY |
-| Preview URL | `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app` |
+| Preview-деплой | `dpl_Ei8uCRPkxhR7XxuNwA5F6gGruzYP`, SHA `b39b7a5b`, READY |
+| Preview URL | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app` |
 | Доступ к Preview | только после входа в Vercel (`ssoProtection = all_except_custom_domains`) |
-| Тестовая Supabase | **не создана** - блокер на доступе владельца к Supabase CLI |
-| Изоляция Preview от production | выполнена и подтверждена |
+| Тестовая Supabase | создана: `netevqurorkipymtvmwb` «Oukcion Preview Test», free, eu-central-1 |
+| Схема | применена и проверена (30 проверок), 24 из 24 PASS |
+| Данные | засеяны вымышленные персоны и товары (3 + 4) |
+| Runtime-проверки RLS | 16 из 16 PASS на настоящем PostgreSQL |
+| Браузерные проверки Preview | 32 из 32 PASS, три прогона подряд |
+| Изоляция от production | подтверждена: production-хост не встречается ни в HTML, ни в 8 JS-чанках |
 | Production | не изменён (данные, значения переменных, деплои) |
 
-## 2. Блокер и минимальное действие владельца
+## 2. Ссылки для ручной проверки
 
-Токен Supabase CLI в связке ключей отозван. Любой вызов management API
-возвращает ровно:
-
-```
-Invalid access token
-```
-
-Источник ошибки установлен: PAT лежит в связке ключей macOS
-(`svce = "Supabase CLI"`, `acct = "supabase"`, формат `sbp_…`, 44 символа,
-создан 2026-08-14). Переменная окружения `SUPABASE_ACCESS_TOKEN` не задана и
-авторизацию не перекрывает - токен отвергает сам API Supabase на всех
-эндпоинтах (`/v1/projects`, `/v1/organizations`, `/v1/me`, `/v1/tokens/me`).
-
-Автоматически восстановить доступ нельзя: macOS не даёт ни JavaScript из
-Apple Events в Chrome, ни Accessibility для `osascript`.
-
-**Минимальное действие (одно):**
-
-```bash
-# 1. Создать токен: https://supabase.com/dashboard/account/tokens
-#    (Management API / Read & Write Management API)
-# 2. Выполнить в своей консоли:
-supabase login --token <СОЗДАННЫЙ_ТОКЕН>
-```
-
-Токен не присылать в чат и не класть в Git. CLI сохранит его в связке ключей.
-
-Альтернатива: в Chrome уже открыт таб «Authorize CLI | Supabase» - нажатие
-Authorize даёт тот же результат. Актуальная сессия на момент отчёта:
-
-```
-https://supabase.com/dashboard/cli/login?session_id=9102dc81-bbd1-4610-83c1-8044a5eace2f&token_name=cli_macintosh@Macintosh-2.local_1792630309&public_key=048ab1f852bedbb45ea60d9712d382772e493c4034df3b559deb6a59fc5fe9f2aa799402dc0ec6d24b038c318c21d4fed6355fccd0f702e54d792e08c60ff5e774
-```
-
-Сессия ждёт нажатия Authorize; после него CLI сохранит токен в связке ключей и
-`supabase projects list` заработает. Отозванный токен из связки ключей уже
-удалён, поэтому CLI сейчас честно сообщает «Access token not provided».
-
-## 3. Что сделано
-
-### 3.1. Подготовка исходников
-
-- Проверены ветка, HEAD и рабочее дерево: незакоммиченных изменений не было.
-- В Git нет `.env`, секретов, резервных копий и временных файлов.
-  Отслеживаются только `.env.example` (только имена переменных, без
-  значений) и `.vercel/project.json` (только orgId и projectId).
-- Поиск по всей истории Git не нашёл ни одного токена, service_role ключа
-  или JWT.
-- `tsconfig.tsbuildinfo` убран из отслеживания и добавлен в `.gitignore`.
-
-### 3.2. Remote и связь с Vercel
-
-- `origin` = `https://github.com/Shvachkomax/Ouction.git` (private).
-- Vercel привязан к тому же репозиторию: `repoId 1320245903`,
-  `productionBranch = main`. Привязка не менялась.
-- Push feature-ветки создаёт только Preview. Подтверждено фактически:
-  деплой с `gitSource.ref = feature/catalog-product-pages` не получил
-  production-alias, production-деплои не добавились.
-- Push требовал увеличения `http.postBuffer` (пак 36 МБ).
-
-### 3.3. Исправления в коде (до деплоя)
-
-`supabase/cabinet-login-attempts.sql` и `app/cabinet/artists/actions.ts`
-(d7bc66b) - исправлены три реальных дефекта лимитера входа в кабинет:
-
-1. `return query` не прерывал функцию: после ветки «первая попытка» код
-   продолжался и падал на `NOT NULL`. Первая попытка по новому ключу всегда
-   завершалась ошибкой, то есть общий лимитер не работал вообще.
-2. Конкурентные первые попытки использовали `on conflict do nothing`:
-   счётчик терял часть попыток и не совпадал с числом запросов.
-3. `REVOKE ... FROM anon/authenticated` не отменяет `PUBLIC`-грант, который
-   Postgres выдаёт на `CREATE FUNCTION` по умолчанию. Клиент мог вызвать
-   `reset_cabinet_login_rate_limit` и снять свою блокировку - то есть обойти
-   лимитер. Добавлен `revoke ... from public`.
-4. `search_path = public` заменён на `search_path = ''`, все объекты
-   квалифицированы.
-
-В приложении in-memory счётчик удалён: serverless-инстансы Vercel его не
-разделяют, поэтому это не общая защита. Если общий лимитер недоступен, вход
-отклоняется целиком (fail closed) с сообщением
-«Вход временно недоступен: не работает защита от подбора кода».
-
-`supabase/media-storage.sql` - добавлены явные политики чтения бакета
-`oukcion-media` и записи только через `service_role`.
-
-### 3.4. Изоляция Preview от production
-
-Обнаружено: все 4 переменные Vercel имели target `["preview","production"]`.
-Проверено по бандлу production-сайта - значение `NEXT_PUBLIC_SUPABASE_URL`
-указывает на `https://ekxqnzhylckbdptrooms.supabase.co`, то есть Preview
-унаследовал production-базу.
-
-Выполнено:
-
-- у всех 4 общих переменных target изменён на `["production"]`
-  (значения не тронуты) - Preview больше не наследует production-значения;
-- Preview-деплой, собранный до этого (`dpl_DV7uLLtDn9DY2qga6JTM2VxxLUME`),
-  удалён;
-- устаревший Preview-деплой предыдущего SHA также удалён, остался один
-  актуальный.
-
-### 3.5. Инструменты проверки
-
-| Скрипт | Назначение |
+| Что | Ссылка |
 |---|---|
-| `scripts/preview-db-setup.mjs` | применяет схему к подтверждённому test ref дважды (идемпотентность) и проверяет RLS, права таблиц, SECURITY DEFINER, `search_path`, привилегии `EXECUTE`; отказывается работать с production ref |
-| `scripts/seed-preview-data.mjs` | наполняет тестовую базу вымышленными персонами и товарами (`published` / `draft` / `moderation`) |
-| `scripts/preview-db-runtime-test.mjs` | через PostgREST проверяет: anon не читает черновики, не пишет, не вызывает RPC лимитера; параллельные попытки входа считаются точно; лимит срабатывает и блокирует |
-| `scripts/preview-browser-check.mjs` | браузерная проверка действующего Preview: страницы, 404, кабинет, мобильная вёрстка, отсутствие обращений к Supabase |
+| Главная | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/` |
+| Каталог | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/catalog` |
+| Товар (опубликован) | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/products/test-sketch-42` |
+| Товар (вторая цена) | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/products/test-vase-blue` |
+| Персона | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/artists/test-anna-vetrova` |
+| Кабинет оператора | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/cabinet/artists` |
+| Страница 404 | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/no-such-route` |
 
-## 4. Проверки на действующем Preview (17 из 17 пройдено)
+Все ссылки требуют входа в Vercel.
+
+**Код доступа в кабинет (только Preview):** `2glD5p9oBgoNqXwdFpLO`
+
+Код задан переменной `CABINET_ACCESS_CODE` с target `preview` в Vercel и
+действует только в Preview-окружении: production использует другой код.
+Значение также лежит локально в `/tmp/oukcion-preview/cabinet_code.txt` и в
+связке ключей Vercel (sensitive). В Git кода нет.
+
+### Что можно проверить вручную
+
+1. Каталог: видны персоны «Анна Ветрова (тест)», «Павел Гусев (тест)»,
+   «Соня Имер (тест)» и опубликованные товары «Скетч №42 (тест)»
+   (15 000 ₽) и «Ваза "Синяя" (тест)» (24 000 ₽). Черновик и товар на
+   модерации не видны.
+2. Карточка товара: название, цена, остаток, состояние, персона, описание,
+   происхождение, условия доставки.
+3. Карточка персоны: имя, описание, список её товаров.
+4. Несуществующий slug → 404 «Такой страницы нет».
+5. Кабинет: неверный код → «Неверный код доступа»; верный код → список
+   карточек, форма создания персоны и товара.
+6. Мобильный экран (390×844): без горизонтального переполнения.
+
+## 3. Тестовая база данных
+
+| Параметр | Значение |
+|---|---|
+| Проект | `netevqurorkipymtvmwb` «Oukcion Preview Test» |
+| Организация | `zfmmhueqnkyenyrlboic` «Shvachkomax's Org», plan `free` |
+| Регион | eu-central-1 |
+| URL | `https://netevqurorkipymtvmwb.supabase.co` |
+| Таблицы | `artists`, `physical_products`, `cabinet_login_attempts` |
+| Бакет | `oukcion-media` (public, 8 МБ, jpeg/png/webp) |
+
+Production-проект `ekxqnzhylckbdptrooms` не изменялся. Проекты «Точки
+опоры» (`blwogrdezfhprdpdnxtn`, `eehyehlhiyztciaezaus`) не использовались и
+не затрагивались.
+
+### Засеянные данные (полностью вымышленные)
+
+- Персоны: `test-anna-vetrova`, `test-pavel-gusev`, `test-sonya-imer`.
+- Товары: `test-sketch-42` (published), `test-vase-blue` (published),
+  `test-sketch-draft` (draft), `test-vase-moderation` (moderation).
+
+## 4. Что проверено на настоящем PostgreSQL
+
+`node scripts/preview-db-runtime-test.mjs` - 16 проверок, все PASS:
 
 | Проверка | Результат |
 |---|---|
-| Главная отвечает 200, русский интерфейс | ПРОШЁЛ |
-| Каталог отвечает 200 | ПРОШЁЛ |
-| Каталог показывает «Не удалось загрузить каталог», а не пустой список | ПРОШЁЛ |
-| Каталог не показывает «Товаров не найдено» при ошибке БД | ПРОШЁЛ |
-| Страница товара без БД - 200 с ошибкой, а не 404 | ПРОШЁЛ |
-| Неизвестный маршрут - 404 | ПРОШЁЛ |
-| Страница 404 на русском («Такой страницы нет») | ПРОШЁЛ |
-| Кабинет показывает форму входа | ПРОШЁЛ |
-| Неверный код не пускает в кабинет | ПРОШЁЛ |
-| Вход без общего лимитера отклонён с понятным сообщением | ПРОШЁЛ |
-| Mobile `/`, `/catalog`, `/cabinet/artists` - 0 px переполнения | ПРОШЁЛ |
-| Preview не обращается к production Supabase | ПРОШЁЛ |
-| Preview не обращается ни к одному Supabase | ПРОШЁЛ |
-| Ошибок JS в консоли нет | ПРОШЁЛ |
+| anon читает опубликованные товары | PASS (2 строки) |
+| anon не читает черновики | PASS (0 строк) |
+| anon не читает товары на модерации | PASS (0 строк) |
+| anon не может вставить персону | PASS (401) |
+| anon не может изменить товар | PASS (401) |
+| anon не может удалить товар | PASS (401) |
+| anon не видит таблицу лимитера | PASS (401) |
+| anon не вызывает RPC лимитера | PASS (401) |
+| anon не вызывает сброс лимитера | PASS (401) |
+| service_role видит таблицу лимитера | PASS (200) |
+| 8 параллельных вызовов лимитера успешны | PASS (0 ошибок) |
+| 8 параллельных первых попыток посчитаны точно | PASS (8 из 8) |
+| 8 параллельных первых попыток создали одну строку | PASS (1 строка) |
+| лимит блокирует запрос, достигший порога | PASS (`locked: true`) |
+| заблокированная строка сохраняет точный счётчик | PASS (`attempt_count: 10`) |
+| сброс лимитера удаляет строку | PASS (0 строк) |
 
-Скриншоты: `docs/audit/screenshots/preview-*.png`.
+Проверка конкуренции подтверждает, что атомарный `insert ... on conflict do
+update` действительно считает параллельные попытки: все 8 запросов, идущих
+одновременно, учтены, а не потеряны.
 
-## 5. Ссылки
+## 5. Проверки схемы
 
-- Preview: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app`
-- Каталог: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app/catalog`
-- Кабинет: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app/cabinet/artists`
-- Прямая ссылка на тестовый товар и тестовую персону появится после создания
-  тестовой БД и наполнения её вымышленными данными.
+`node scripts/preview-db-setup.mjs --apply` - 30 проверок, все PASS:
 
-Все ссылки требуют входа в Vercel: включено `ssoProtection =
-all_except_custom_domains`.
+- таблицы `artists`, `physical_products`, `cabinet_login_attempts` созданы,
+  RLS включён;
+- `anon` и `authenticated` имеют на каталоговых таблицах только `SELECT`;
+- на `cabinet_login_attempts` у клиентских ролей нет ни одного гранта;
+- обе функции лимитера: `SECURITY DEFINER`, `search_path = ""`,
+  `anon`/`authenticated` не могут `EXECUTE`, `service_role` может;
+- все обращения к таблицам в функциях qualify схемой (`public.`);
+- бакет `oukcion-media` существует, публичный, с ограничениями по размеру и
+  MIME; политики чтения для клиентов и записи только для `service_role`.
 
-Указанные ссылки ведут на проверенный деплой `dpl_7AGmcHx46ags7g11nF1HF65ghPNg`.
-После этого отчёта в ветку добавлен только документационный коммит - он создаёт
-ещё один Preview-деплой с тем же кодом и той же защитой. Актуальный деплой
-ветки всегда виден в Vercel → Project `oukcion` → Deployments.
+Схема применяется дважды подряд без ошибок - применение идемпотентно.
 
-## 6. Код оператора для Preview
+### Найденный и исправленный дефект привилегий
 
-`CABINET_ACCESS_CODE` в Preview не задан - тестовый код появится вместе с
-остальными переменными после создания тестовой БД. Владелец получает его
-так, не публикуя в Git:
+Supabase по умолчанию выдаёт `anon` и `authenticated` все права на таблицы
+публичной схемы. RLS закрывает чтение и запись, но `TRUNCATE` и `REFERENCES`
+под RLS не попадают - таблицу мог обрезать анонимный клиент. В
+`supabase/artists.sql` и `supabase/physical-products.sql` добавлен явный
+`revoke all ... from anon, authenticated` перед `grant select`. Все записи в
+приложении идут через `service_role`, поэтому поведение кабинета не
+изменилось.
 
-- Vercel → Project `oukcion` → Settings → Environment Variables → Preview →
-  `CABINET_ACCESS_CODE` → Reveal;
-- либо из своего менеджера паролей (значение задаётся один раз при
-  создании переменной).
+## 6. Браузерные проверки Preview
 
-Значение не попадает в репозиторий: переменная sensitive, в Git нет файлов
-с секретами.
+`node scripts/preview-browser-check.mjs` - 32 проверки, все PASS (три
+прогона подряд):
 
-## 7. Ограничения
+- главная, каталог, товар, персона, 404, кабинет - HTTP 200 и русский
+  интерфейс;
+- каталог показывает тестовые данные, черновик и модерация скрыты;
+- карточка товара показывает название, цену, персону, остаток и состояние;
+- неизвестные slug товара и персоны дают 404;
+- 404 на русском: «Такой страницы нет»;
+- кабинет: неверный код отклонён с сообщением «Неверный код доступа»,
+  общий лимитер доступен, верный код открывает кабинет со списком карточек;
+- мобильные `/`, `/catalog`, `/products/…`, `/artists/…`, `/cabinet/artists` -
+  0 px горизонтального переполнения;
+- браузер не обращается к Supabase напрямую (каталог читается на сервере);
+- ошибок в консоли браузера нет.
 
-- Тестовой БД нет: не проверены на настоящем PostgreSQL RLS-политики,
-  атомарность лимитера при параллельных попытках, запись через server
-  actions с `service_role`, загрузка файлов в storage, реальные медиа-URL.
-  Mock-фильтрация проверкой RLS не является.
-- Preview без тестовой БД показывает состояние ошибки БД во всех
-  каталоговых разделах - это ожидаемо и безопаснее, чем наследование
-  production-значений.
-- Для автоматической проверки защищённого Preview создан bypass-токен
-  защиты деплоя Vercel (`automation-bypass`). Публичность деплоя он не
-  меняет. Удаляется в Vercel → Project → Settings → Deployment Protection →
-  Protection Bypass for Automation.
+`node scripts/preview-isolation-check.mjs` - 4 проверки, все PASS:
+
+- production-хост `ekxqnzhylckbdptrooms.supabase.co` не встречается ни в
+  HTML, ни в 8 JS-чанках;
+- тестовый адрес БД не утёк в клиентский бандл;
+- каталог отдаёт данные тестовой БД (помечены как тестовые);
+- в каталоге нет сообщений об ошибке БД.
+
+## 7. Переменные Vercel
+
+| Переменная | production | preview |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | прежнее значение | `https://netevqurorkipymtvmwb.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | прежнее значение | publishable-ключ тестового проекта |
+| `SUPABASE_SERVICE_ROLE_KEY` | прежнее значение | service_role тестового проекта |
+| `CABINET_ACCESS_CODE` | прежнее значение | `2glD5p9oBgoNqXwdFpLO` |
+
+Значения production-переменных не менялись, добавлены только отдельные
+переменные с target `preview`.
+
+### Замечание по ключам
+
+Management API возвращает новый тип ключа `sb_secret_…` замаскированным
+(середина значения - точки), поэтому использовать его нельзя: PostgREST
+отвечает «Invalid API key». В Preview применяется legacy-ключ
+`service_role` (JWT), который возвращается полностью и работает и в
+PostgREST, и в `supabase-js`.
 
 ## 8. Production не изменён
 
-- Production-данные: не читали и не писали (запросы к production делались
-  только на чтение при проверке изоляции).
-- Значения переменных: прежние; изменён только список target у общих
-  переменных (`preview` убран, `production` оставлен).
+- Production-данные: не читал и не писал.
+- Значения переменных: прежние; у общих переменных изменён только список
+  target, добавлены отдельные переменные для `preview`.
 - Production-деплой: не менялся. По-прежнему 3 деплоя из `main`
   (`193c588f`, `5b13ac42`, `bc26a89f`). Новые деплои созданы только для
   feature-ветки.
-- Production-сайт отвечает 200 и читает
-  `https://ekxqnzhylckbdptrooms.supabase.co`.
+- Production-сайт отвечает 200, по-прежнему читает
+  `https://ekxqnzhylckbdptrooms.supabase.co`; `/catalog` на production - 404
+  (каталог есть только в feature-ветке).
 - Merge в `main`, production-деплой и продвижение Preview в production не
   выполнялись.
 
-## 9. Что сделать дальше
+## 9. Ограничения
 
-1. `supabase login --token <PAT>` (одно действие владельца).
-2. `supabase projects list` / `supabase orgs list` - найти или создать
-   бесплатный `oukcion-preview-test`, указав организацию и проверив тариф.
-3. `node scripts/preview-db-setup.mjs --apply` - применить схему и проверить
-   права.
-4. `node scripts/seed-preview-data.mjs` - вымышленные данные.
-5. `node scripts/preview-db-runtime-test.mjs` - проверки ролей и конкуренции.
-6. Задать 4 переменные с target `preview`, затем пересобрать Preview.
-7. `node scripts/preview-browser-check.mjs` против нового Preview и снять
-   финальные скриншоты с данными.
+- Тестовые данные вымышленные: реальных лотов, персон и фотографий нет.
+- Загрузка медиа через кабинет на Preview не проверялась вручную, хотя
+  права и бакет проверены на уровне БД и схемы.
+- Для автоматической проверки защищённого Preview создан bypass-токен
+  защиты деплоя Vercel (`automation-bypass`). Публичность деплоя он не
+  меняет. Удаляется в Vercel → Project `oukcion` → Settings → Deployment
+  Protection → Protection Bypass for Automation.
+- Проект Supabase создан на бесплатном тарифе; при его удалении нужно
+  также удалить 4 переменные с target `preview`.
+
+## 10. Как повторить проверку
+
+```bash
+# 1. схема и проверки (нужен PAT в keychain)
+export SUPABASE_ACCESS_TOKEN=$(security find-generic-password -s "Supabase CLI" -a "supabase" -w)
+export PREVIEW_PROJECT_REF=netevqurorkipymtvmwb
+node scripts/preview-db-setup.mjs --apply
+
+# 2. данные и runtime-проверки
+source /tmp/oukcion-preview/env.sh   # PREVIEW_SUPABASE_URL, PREVIEW_*_KEY
+node scripts/seed-preview-data.mjs
+node scripts/preview-db-runtime-test.mjs
+
+# 3. браузерные проверки и изоляция
+export PREVIEW_URL=https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app
+export VERCEL_BYPASS=<bypass-токен из Vercel>
+export PREVIEW_DB_HOST=netevqurorkipymtvmwb.supabase.co
+export CABINET_CODE=2glD5p9oBgoNqXwdFpLO
+node scripts/preview-browser-check.mjs
+node scripts/preview-isolation-check.mjs
+```

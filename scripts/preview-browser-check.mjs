@@ -2,13 +2,17 @@
 /**
  * Browser check of the Oukcion Preview deployment.
  *
- * Verifies that the Preview renders, cannot reach the production Supabase,
- * and fails closed on the cabinet login when the shared rate limiter is not
- * configured.
+ * Two modes:
+ *   - without a database: the pages must fail closed (error state, no
+ *     silent empty catalogue) and the cabinet must reject the login;
+ *   - with a database (PREVIEW_DB_HOST set): the seeded catalogue must be
+ *     visible, drafts and moderation rows must stay hidden, the cabinet must
+ *     open with the correct code, and the Preview must talk to the test
+ *     database only.
  *
  * Usage:
- *   PREVIEW_URL=<deployment url> \
- *   VERCEL_BYPASS=<protection bypass token> \
+ *   PREVIEW_URL=<deployment url> VERCEL_BYPASS=<bypass token> \
+ *   [PREVIEW_DB_HOST=<ref>.supabase.co] [CABINET_CODE=<code>] \
  *   node scripts/preview-browser-check.mjs
  */
 
@@ -17,6 +21,10 @@ import fs from "node:fs";
 
 const PREVIEW = process.env.PREVIEW_URL;
 const BYPASS = process.env.VERCEL_BYPASS;
+const DB_HOST = process.env.PREVIEW_DB_HOST || "";
+const CABINET_CODE = process.env.CABINET_CODE || "";
+const PRODUCT_SLUG = process.env.PRODUCT_SLUG || "test-sketch-42";
+const ARTIST_SLUG = process.env.ARTIST_SLUG || "test-anna-vetrova";
 const OUT = "/Users/macintosh/Documents/GitHub/Ouction/Ouction/docs/audit/screenshots";
 
 if (!PREVIEW || !BYPASS) {
@@ -24,6 +32,7 @@ if (!PREVIEW || !BYPASS) {
   process.exit(2);
 }
 
+const WITH_DB = Boolean(DB_HOST);
 const results = [];
 const log = (name, expected, actual, ok, extra = {}) =>
   results.push({ name, expected, actual, status: ok ? "ПРОШЁЛ" : "ПРОВАЛ", ...extra });
@@ -48,59 +57,165 @@ page.on("request", (req) => {
   if (host.endsWith("supabase.co")) seenHosts.add(host);
 });
 
+// Вёрстка использует неразрывные пробелы (U+00A0): перед сравнением
+// приводим их к обычным, иначе проверки строк дают ложный провал.
+const norm = (text) => text.replace(/\u00a0/g, " ");
+
+const overflowOf = (target) =>
+  target.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
+
 // --- home -----------------------------------------------------------------
 const home = await page.goto(`${PREVIEW}/`, { waitUntil: "networkidle" });
 log("главная отвечает 200", 200, home.status(), home.status() === 200);
-const homeOverflow = await page.evaluate(
-  () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-);
-log(
-  "главная без горизонтального переполнения",
-  0,
-  homeOverflow,
-  homeOverflow === 0
-);
+const homeOverflow = await overflowOf(page);
+log("главная без горизонтального переполнения", 0, homeOverflow, homeOverflow === 0);
 await page.screenshot({ path: `${OUT}/preview-home-desktop.png`, fullPage: true });
 
-// --- catalog --------------------------------------------------------------
+// --- catalogue ------------------------------------------------------------
 const catalog = await page.goto(`${PREVIEW}/catalog`, { waitUntil: "networkidle" });
 log("каталог отвечает 200", 200, catalog.status(), catalog.status() === 200);
-const catalogText = await page.innerText("body");
-const catalogShowsError = catalogText.includes("Не удалось загрузить каталог");
+const catalogText = norm(await page.innerText("body"));
+const catalogOverflow = await overflowOf(page);
 log(
-  "каталог показывает состояние ошибки БД (нет молчаливого пустого списка)",
-  true,
-  catalogShowsError,
-  catalogShowsError
+  "каталог без горизонтального переполнения",
+  0,
+  catalogOverflow,
+  catalogOverflow === 0
 );
-log(
-  "каталог не показывает «Товаров не найдено» при ошибке",
-  false,
-  catalogText.includes("Товаров не найдено"),
-  !catalogText.includes("Товаров не найдено")
-);
+
+if (WITH_DB) {
+  log(
+    "каталог показывает тестовые данные",
+    true,
+    catalogText.includes("Анна Ветрова"),
+    catalogText.includes("Анна Ветрова")
+  );
+  log(
+    "каталог не показывает состояние ошибки БД",
+    false,
+    catalogText.includes("Не удалось загрузить каталог"),
+    !catalogText.includes("Не удалось загрузить каталог")
+  );
+  log(
+    "опубликованный товар виден",
+    true,
+    catalogText.includes("Скетч №42"),
+    catalogText.includes("Скетч №42")
+  );
+  log(
+    "черновик не виден в каталоге",
+    false,
+    catalogText.includes("Черновик"),
+    !catalogText.includes("Черновик")
+  );
+  log(
+    "товар на модерации не виден в каталоге",
+    false,
+    catalogText.includes("Модерация"),
+    !catalogText.includes("Модерация")
+  );
+} else {
+  const showsError = catalogText.includes("Не удалось загрузить каталог");
+  log(
+    "каталог показывает состояние ошибки БД (нет молчаливого пустого списка)",
+    true,
+    showsError,
+    showsError
+  );
+  log(
+    "каталог не показывает «Товаров не найдено» при ошибке",
+    false,
+    catalogText.includes("Товаров не найдено"),
+    !catalogText.includes("Товаров не найдено")
+  );
+}
 await page.screenshot({ path: `${OUT}/preview-catalog-desktop.png`, fullPage: true });
 
-// --- product page without a database -------------------------------------
-// Без подключённой БД страница товара обязана показать состояние ошибки,
-// а не выдавать 404: «нет товара» и «не читается база» - разные ситуации.
-const productPage = await page.goto(`${PREVIEW}/products/test-does-not-exist`, {
+// --- product page ---------------------------------------------------------
+const product = await page.goto(`${PREVIEW}/products/${PRODUCT_SLUG}`, {
   waitUntil: "networkidle"
 });
-const productText = await page.innerText("body");
-log(
-  "страница товара без БД отвечает 200 и показывает ошибку, а не 404",
-  true,
-  productPage.status() === 200 && productText.includes("Не удалось загрузить товар"),
-  productPage.status() === 200 && productText.includes("Не удалось загрузить товар")
-);
+const productText = norm(await page.innerText("body"));
+if (WITH_DB) {
+  log("страница опубликованного товара отвечает 200", 200, product.status(), product.status() === 200);
+  const productComplete =
+    productText.includes("Скетч №42") &&
+    productText.includes("15 000") &&
+    productText.includes("Анна Ветрова");
+  log(
+    "страница товара показывает название, цену и персону",
+    true,
+    productComplete,
+    productComplete
+  );
+  const unknownProduct = await page.goto(`${PREVIEW}/products/test-does-not-exist`, {
+    waitUntil: "networkidle"
+  });
+  log(
+    "неизвестный товар отвечает 404",
+    404,
+    unknownProduct.status(),
+    unknownProduct.status() === 404
+  );
+  const unknownProductText = norm(await page.innerText("body"));
+  log(
+    "страница 404 на русском",
+    true,
+    unknownProductText.includes("Такой страницы нет"),
+    unknownProductText.includes("Такой страницы нет")
+  );
+} else {
+  log(
+    "страница товара без БД отвечает 200 и показывает ошибку, а не 404",
+    true,
+    product.status() === 200 && productText.includes("Не удалось загрузить товар"),
+    product.status() === 200 && productText.includes("Не удалось загрузить товар")
+  );
+}
+await page.goto(`${PREVIEW}/products/${PRODUCT_SLUG}`, { waitUntil: "networkidle" });
+await page.screenshot({ path: `${OUT}/preview-product-desktop.png`, fullPage: true });
+
+// --- artist page ----------------------------------------------------------
+const artist = await page.goto(`${PREVIEW}/artists/${ARTIST_SLUG}`, {
+  waitUntil: "networkidle"
+});
+const artistText = norm(await page.innerText("body"));
+if (WITH_DB) {
+  log("страница персоны отвечает 200", 200, artist.status(), artist.status() === 200);
+  log(
+    "страница персоны показывает имя",
+    true,
+    artistText.includes("Анна Ветрова"),
+    artistText.includes("Анна Ветрова")
+  );
+  const unknownArtist = await page.goto(`${PREVIEW}/artists/test-does-not-exist`, {
+    waitUntil: "networkidle"
+  });
+  log(
+    "неизвестная персона отвечает 404",
+    404,
+    unknownArtist.status(),
+    unknownArtist.status() === 404
+  );
+} else {
+  log(
+    "страница персоны без БД показывает ошибку, а не 404",
+    true,
+    artist.status() === 200 && artistText.includes("Не удалось загрузить персону"),
+    artist.status() === 200 && artistText.includes("Не удалось загрузить персону")
+  );
+}
+await page.goto(`${PREVIEW}/artists/${ARTIST_SLUG}`, { waitUntil: "networkidle" });
+await page.screenshot({ path: `${OUT}/preview-artist-desktop.png`, fullPage: true });
 
 // --- 404 ------------------------------------------------------------------
 const notFound = await page.goto(`${PREVIEW}/no-such-route`, {
   waitUntil: "networkidle"
 });
 log("неизвестный маршрут отвечает 404", 404, notFound.status(), notFound.status() === 404);
-const nfText = await page.innerText("body");
+const nfText = norm(await page.innerText("body"));
 log(
   "страница 404 на русском",
   true,
@@ -108,7 +223,7 @@ log(
   nfText.includes("Такой страницы нет")
 );
 
-// --- cabinet login (fail closed) -----------------------------------------
+// --- cabinet --------------------------------------------------------------
 await page.goto(`${PREVIEW}/cabinet/artists`, { waitUntil: "networkidle" });
 const hasForm = await page.locator('input[name="accessCode"]').count();
 log("кабинет показывает форму входа", 1, hasForm, hasForm === 1);
@@ -119,21 +234,57 @@ await page.waitForLoadState("networkidle");
 await page.waitForTimeout(800);
 
 const cabinetUrl = page.url();
-const cabinetText = await page.innerText("body");
+const cabinetText = norm(await page.innerText("body"));
 log(
   "неверный код не пускает в кабинет",
   true,
   cabinetUrl.includes("error=") || cabinetText.includes("Войти"),
   cabinetUrl.includes("error=") || cabinetText.includes("Войти")
 );
-log(
-  "вход без общего лимитера отклонён с понятным сообщением",
-  true,
-  cabinetText.includes("rate-limiter-unavailable") ||
+
+if (WITH_DB && CABINET_CODE) {
+  log(
+    "неверный код отклонён с сообщением о неверном коде",
+    true,
+    cabinetText.includes("Неверный код доступа"),
+    cabinetText.includes("Неверный код доступа")
+  );
+  log(
+    "общий лимитер доступен (нет сообщения о недоступности лимитера)",
+    false,
     cabinetText.includes("не работает защита от подбора кода"),
-  cabinetText.includes("не работает защита от подбора кода")
-);
-await page.screenshot({ path: `${OUT}/preview-cabinet-desktop.png`, fullPage: true });
+    !cabinetText.includes("не работает защита от подбора кода")
+  );
+
+  await page.goto(`${PREVIEW}/cabinet/artists`, { waitUntil: "networkidle" });
+  await page.fill('input[name="accessCode"]', CABINET_CODE);
+  await page.click('button[type="submit"]');
+  await page.waitForURL((url) => !url.search.includes("error="), { timeout: 20000 });
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Анна Ветрова"),
+    undefined,
+    { timeout: 20000 }
+  );
+
+  const afterLoginUrl = page.url();
+  const afterLoginText = norm(await page.innerText("body"));
+  log(
+    "верный код открывает кабинет",
+    true,
+    !afterLoginUrl.includes("error=") && afterLoginText.includes("Анна Ветрова"),
+    !afterLoginUrl.includes("error=") && afterLoginText.includes("Анна Ветрова")
+  );
+  await page.screenshot({ path: `${OUT}/preview-cabinet-desktop.png`, fullPage: true });
+} else {
+  log(
+    "вход без общего лимитера отклонён с понятным сообщением",
+    true,
+    cabinetText.includes("rate-limiter-unavailable") ||
+      cabinetText.includes("не работает защита от подбора кода"),
+    cabinetText.includes("не работает защита от подбора кода")
+  );
+  await page.screenshot({ path: `${OUT}/preview-cabinet-desktop.png`, fullPage: true });
+}
 
 // --- mobile ---------------------------------------------------------------
 const mctx = await browser.newContext({
@@ -145,15 +296,21 @@ const mctx = await browser.newContext({
   extraHTTPHeaders: { "x-vercel-protection-bypass": BYPASS }
 });
 const mpage = await mctx.newPage();
-for (const path of ["/", "/catalog", "/cabinet/artists"]) {
+for (const path of [
+  "/",
+  "/catalog",
+  `/products/${PRODUCT_SLUG}`,
+  `/artists/${ARTIST_SLUG}`,
+  "/cabinet/artists"
+]) {
   await mpage.goto(`${PREVIEW}${path}`, { waitUntil: "networkidle" });
-  const overflow = await mpage.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-  );
+  const overflow = await overflowOf(mpage);
   log(`mobile ${path} без горизонтального переполнения`, 0, overflow, overflow === 0);
 }
 await mpage.goto(`${PREVIEW}/catalog`, { waitUntil: "networkidle" });
 await mpage.screenshot({ path: `${OUT}/preview-catalog-mobile.png`, fullPage: true });
+await mpage.goto(`${PREVIEW}/products/${PRODUCT_SLUG}`, { waitUntil: "networkidle" });
+await mpage.screenshot({ path: `${OUT}/preview-product-mobile.png`, fullPage: true });
 
 // --- isolation ------------------------------------------------------------
 const productionHosts = [...seenHosts].filter((h) => h.startsWith("ekxqnzhylckbdptrooms"));
@@ -163,7 +320,14 @@ log(
   productionHosts.length,
   productionHosts.length === 0
 );
-log("Preview не обращается ни к одному Supabase", 0, seenHosts.size, seenHosts.size === 0);
+// Каталог читается на сервере, поэтому из браузера запросов к Supabase
+// быть не должно вовсе: прямой доступ клиента к базе - утечка ключа.
+log(
+  "браузер не обращается к Supabase напрямую",
+  0,
+  seenHosts.size,
+  seenHosts.size === 0
+);
 
 const realErrors = consoleErrors.filter((e) => !e.includes("Failed to load resource"));
 log(
@@ -178,7 +342,11 @@ await browser.close();
 
 fs.writeFileSync(
   "/Users/macintosh/Documents/GitHub/Ouction/Ouction/docs/audit/preview-browser-check.json",
-  JSON.stringify({ preview: PREVIEW, at: new Date().toISOString(), results }, null, 2)
+  JSON.stringify(
+    { preview: PREVIEW, withDatabase: WITH_DB, at: new Date().toISOString(), results },
+    null,
+    2
+  )
 );
 
 const failed = results.filter((r) => r.status === "ПРОВАЛ");

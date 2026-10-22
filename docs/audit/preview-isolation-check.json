@@ -1,0 +1,35 @@
+{
+  "preview": "https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app",
+  "chunks": 8,
+  "productionHits": 0,
+  "testHits": 0,
+  "productionFiles": [],
+  "testFiles": [],
+  "at": "2026-10-22T01:20:24.916Z",
+  "results": [
+    {
+      "name": "в HTML и JS-чангах нет production Supabase",
+      "expected": 0,
+      "actual": 0,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "тестовый адрес БД не утёк в клиентский бандл",
+      "expected": 0,
+      "actual": 0,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "каталог отдаёт данные тестовой БД (помечены как тестовые)",
+      "expected": true,
+      "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "каталог не содержит слов ошибки БД",
+      "expected": false,
+      "actual": false,
+      "status": "ПРОШЁЛ"
+    }
+  ]
+}

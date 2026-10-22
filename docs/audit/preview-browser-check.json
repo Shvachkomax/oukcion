@@ -1,6 +1,7 @@
 {
-  "preview": "https://oukcion-555qn8dec-maxim-shvachko-s-projects.vercel.app",
-  "at": "2026-10-22T00:55:01.922Z",
+  "preview": "https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app",
+  "withDatabase": true,
+  "at": "2026-10-22T01:24:12.403Z",
   "results": [
     {
       "name": "главная отвечает 200",
@@ -21,21 +22,81 @@
       "status": "ПРОШЁЛ"
     },
     {
-      "name": "каталог показывает состояние ошибки БД (нет молчаливого пустого списка)",
+      "name": "каталог без горизонтального переполнения",
+      "expected": 0,
+      "actual": 0,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "каталог показывает тестовые данные",
       "expected": true,
       "actual": true,
       "status": "ПРОШЁЛ"
     },
     {
-      "name": "каталог не показывает «Товаров не найдено» при ошибке",
+      "name": "каталог не показывает состояние ошибки БД",
       "expected": false,
       "actual": false,
       "status": "ПРОШЁЛ"
     },
     {
-      "name": "страница товара без БД отвечает 200 и показывает ошибку, а не 404",
+      "name": "опубликованный товар виден",
       "expected": true,
       "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "черновик не виден в каталоге",
+      "expected": false,
+      "actual": false,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "товар на модерации не виден в каталоге",
+      "expected": false,
+      "actual": false,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "страница опубликованного товара отвечает 200",
+      "expected": 200,
+      "actual": 200,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "страница товара показывает название, цену и персону",
+      "expected": true,
+      "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "неизвестный товар отвечает 404",
+      "expected": 404,
+      "actual": 404,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "страница 404 на русском",
+      "expected": true,
+      "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "страница персоны отвечает 200",
+      "expected": 200,
+      "actual": 200,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "страница персоны показывает имя",
+      "expected": true,
+      "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "неизвестная персона отвечает 404",
+      "expected": 404,
+      "actual": 404,
       "status": "ПРОШЁЛ"
     },
     {
@@ -63,7 +124,19 @@
       "status": "ПРОШЁЛ"
     },
     {
-      "name": "вход без общего лимитера отклонён с понятным сообщением",
+      "name": "неверный код отклонён с сообщением о неверном коде",
+      "expected": true,
+      "actual": true,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "общий лимитер доступен (нет сообщения о недоступности лимитера)",
+      "expected": false,
+      "actual": false,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "верный код открывает кабинет",
       "expected": true,
       "actual": true,
       "status": "ПРОШЁЛ"
@@ -81,6 +154,18 @@
       "status": "ПРОШЁЛ"
     },
     {
+      "name": "mobile /products/test-sketch-42 без горизонтального переполнения",
+      "expected": 0,
+      "actual": 0,
+      "status": "ПРОШЁЛ"
+    },
+    {
+      "name": "mobile /artists/test-anna-vetrova без горизонтального переполнения",
+      "expected": 0,
+      "actual": 0,
+      "status": "ПРОШЁЛ"
+    },
+    {
       "name": "mobile /cabinet/artists без горизонтального переполнения",
       "expected": 0,
       "actual": 0,
@@ -93,7 +178,7 @@
       "status": "ПРОШЁЛ"
     },
     {
-      "name": "Preview не обращается ни к одному Supabase",
+      "name": "браузер не обращается к Supabase напрямую",
       "expected": 0,
       "actual": 0,
       "status": "ПРОШЁЛ"
