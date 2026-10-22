@@ -55,5 +55,13 @@ export default tseslint.config(
     languageOptions: {
       globals: { ...globals.node }
     }
+  },
+  {
+    // Скрипты проверки выполняются в Node, но колбэки page.evaluate
+    // из Playwright исполняются в браузере и обращаются к document.
+    files: ["scripts/**/*.js", "scripts/**/*.mjs", "scripts/**/*.cjs"],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser }
+    }
   }
 );

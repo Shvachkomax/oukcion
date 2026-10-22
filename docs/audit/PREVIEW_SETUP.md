@@ -192,12 +192,12 @@ Preview-деплой не влияет на production. Откат Preview = у�
 - Загрузка файлов в storage.
 - Кэширование страниц с `revalidate` на реальных данных.
 
-## 8. Состояние окружения (на 2026-10-22, SHA `fe8877e`)
+## 8. Состояние окружения (на 2026-10-22, SHA `d72f2b8`)
 
 | Окружение | Привязка | Состояние |
 |---|---|---|
 | Production | `Shvachkomax/Ouction:main` → Vercel `oukcion` | Работает, данные видны, деплой не менялся |
-| Preview | Тот же Vercel-проект, ветка `feature/catalog-product-pages` | Деплой `dpl_661B7SmmtrteSHvBfmiDjwy1t5sL` (SHA `fe8877e`) собран **без** Supabase-переменных |
+| Preview | Тот же Vercel-проект, ветка `feature/catalog-product-pages` | Деплой `dpl_7AGmcHx46ags7g11nF1HF65ghPNg` (SHA `d72f2b8`) собран **без** Supabase-переменных |
 | Переменные Vercel | 4 общих, target = `production` | Значения прежние, Preview их не наследует |
 | Защита деплоя | `ssoProtection = all_except_custom_domains` | Preview открыт только после входа в Vercel |
 | Supabase CLI | `Invalid access token` | Требуется `supabase login --token <PAT>` |
@@ -229,8 +229,9 @@ Production-данные, значения переменных и деплой �
 - у 4 общих переменных изменён только список target (`preview` убран,
   `production` оставлен), значения не тронуты;
 - Preview-деплои, собранные до снятия наследования и устаревшие по SHA
-  (`dpl_DV7uLLtD…`, `dpl_AxUarVXJDWS2bCHJiBvUqWkkYqe4`), удалены - остался
-  один актуальный `dpl_661B7SmmtrteSHvBfmiDjwy1t5sL`;
+  (`dpl_DV7uLLtD…`, `dpl_AxUarVXJDWS2bCHJiBvUqWkkYqe4`,
+  `dpl_661B7SmmtrteSHvBfmiDjwy1t5sL`), удалены - остался один актуальный
+  `dpl_7AGmcHx46ags7g11nF1HF65ghPNg`;
 - production-сайт отвечает 200 и по-прежнему читает
   `https://ekxqnzhylckbdptrooms.supabase.co`.
 

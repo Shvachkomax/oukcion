@@ -2,15 +2,15 @@
 
 Дата: 2026-10-22
 Ветка: `feature/catalog-product-pages`
-Локальный HEAD и remote HEAD: `fe8877e`
+Локальный HEAD и remote HEAD: `d72f2b8`
 Проект Vercel: `maxim-shvachko-s-projects/oukcion` (`prj_JLR1FscDMoq1OgvSCqT0aWnVm7oK`)
 
 ## 1. Итог
 
 | Пункт | Состояние |
 |---|---|
-| Preview-деплой | `dpl_661B7SmmtrteSHvBfmiDjwy1t5sL`, SHA `fe8877eb`, READY |
-| Preview URL | `https://oukcion-g1o28a0s9-maxim-shvachko-s-projects.vercel.app` |
+| Preview-деплой | `dpl_7AGmcHx46ags7g11nF1HF65ghPNg`, SHA `d72f2b86`, READY |
+| Preview URL | `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app` |
 | Доступ к Preview | только после входа в Vercel (`ssoProtection = all_except_custom_domains`) |
 | Тестовая Supabase | **не создана** - блокер на доступе владельца к Supabase CLI |
 | Изоляция Preview от production | выполнена и подтверждена |
@@ -143,14 +143,19 @@ Authorize даёт тот же результат.
 
 ## 5. Ссылки
 
-- Preview: `https://oukcion-g1o28a0s9-maxim-shvachko-s-projects.vercel.app`
-- Каталог: `https://oukcion-g1o28a0s9-maxim-shvachko-s-projects.vercel.app/catalog`
-- Кабинет: `https://oukcion-g1o28a0s9-maxim-shvachko-s-projects.vercel.app/cabinet/artists`
+- Preview: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app`
+- Каталог: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app/catalog`
+- Кабинет: `https://oukcion-3897rxw74-maxim-shvachko-s-projects.vercel.app/cabinet/artists`
 - Прямая ссылка на тестовый товар и тестовую персону появится после создания
   тестовой БД и наполнения её вымышленными данными.
 
 Все ссылки требуют входа в Vercel: включено `ssoProtection =
 all_except_custom_domains`.
+
+Указанные ссылки ведут на проверенный деплой `dpl_7AGmcHx46ags7g11nF1HF65ghPNg`.
+После этого отчёта в ветку добавлен только документационный коммит - он создаёт
+ещё один Preview-деплой с тем же кодом и той же защитой. Актуальный деплой
+ветки всегда виден в Vercel → Project `oukcion` → Deployments.
 
 ## 6. Код оператора для Preview
 

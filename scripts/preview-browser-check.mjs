@@ -51,7 +51,6 @@ page.on("request", (req) => {
 // --- home -----------------------------------------------------------------
 const home = await page.goto(`${PREVIEW}/`, { waitUntil: "networkidle" });
 log("главная отвечает 200", 200, home.status(), home.status() === 200);
-const homeHtml = await page.content();
 const homeOverflow = await page.evaluate(
   () => document.documentElement.scrollWidth - document.documentElement.clientWidth
 );
