@@ -29,4 +29,9 @@ to anon, authenticated
 using (true);
 
 grant usage on schema public to anon, authenticated;
+
+-- Supabase выдаёт anon и authenticated все права на таблицы публичной схемы
+-- по умолчанию. RLS закрывает строки и строки на запись, но TRUNCATE и
+-- REFERENCES под RLS не попадают, поэтому лишние привилегии отзываются явно.
+revoke all on table public.artists from anon, authenticated;
 grant select on table public.artists to anon, authenticated;

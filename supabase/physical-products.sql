@@ -38,4 +38,8 @@ to anon, authenticated
 using (status = 'published');
 
 grant usage on schema public to anon, authenticated;
+
+-- Явный отзыв прав записи: RLS не покрывает TRUNCATE и REFERENCES,
+-- а все записи в приложении идут через service_role.
+revoke all on table public.physical_products from anon, authenticated;
 grant select on table public.physical_products to anon, authenticated;

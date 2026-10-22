@@ -89,6 +89,30 @@ async function applySchema() {
   }
 }
 
+/**
+ * Возвращает имена таблиц, к которым идут DML-запросы без указания схемы.
+ * Комментарии и служебные конструкции (ON CONFLICT DO UPDATE, RETURNING INTO)
+ * не считаются обращением к таблице.
+ */
+function unqualifiedTargets(definition) {
+  const body = definition.replace(/--[^\n]*/g, "");
+  const targets = [];
+  const patterns = [
+    /\binsert\s+into\s+([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)?)/gi,
+    /\bupdate\s+([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)?)\s+set\b/gi,
+    /\bdelete\s+from\s+([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)?)/gi,
+    /\bfrom\s+([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)?)/gi
+  ];
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(body)) !== null) {
+      const target = match[1];
+      if (!target.includes(".")) targets.push(target);
+    }
+  }
+  return [...new Set(targets)];
+}
+
 function check(label, ok, detail = "") {
   const mark = ok ? "PASS" : "FAIL";
   console.log(`${mark}  ${label}${detail ? ` — ${detail}` : ""}`);
@@ -99,14 +123,14 @@ async function verify() {
   let ok = true;
 
   const tables = await runSql(`
-    select table_name, row_security
-    from pg_tables
+    select tablename, rowsecurity
+    from pg_catalog.pg_tables
     where schemaname = 'public'
-      and table_name in ('artists', 'physical_products', 'cabinet_login_attempts')
-    order by table_name;
+      and tablename in ('artists', 'physical_products', 'cabinet_login_attempts')
+    order by tablename;
   `);
   const tableMap = new Map(
-    (Array.isArray(tables) ? tables : []).map((row) => [row.table_name, row.row_security])
+    (Array.isArray(tables) ? tables : []).map((row) => [row.tablename, row.rowsecurity])
   );
 
   for (const name of ["artists", "physical_products", "cabinet_login_attempts"]) {
@@ -150,7 +174,9 @@ async function verify() {
   }
 
   const limiterGrants = (tableGrants || []).filter(
-    (row) => row.table_name === "cabinet_login_attempts"
+    (row) =>
+      row.table_name === "cabinet_login_attempts" &&
+      row.grantee !== "service_role"
   );
   ok =
     check(
@@ -184,7 +210,7 @@ async function verify() {
       check(
         `${fn.proname}: empty search_path`,
         Array.isArray(fn.proconfig) &&
-          fn.proconfig.some((entry) => entry === "search_path="),
+          fn.proconfig.some((entry) => /^search_path=(""|'')?$/.test(entry)),
         JSON.stringify(fn.proconfig)
       ) && ok;
     ok =
@@ -205,9 +231,8 @@ async function verify() {
     ok =
       check(
         `${fn.proname}: all objects qualified`,
-        !/\n\s*(select|insert|update|delete)\s+[a-z_]+/i.test(fn.definition || "") ||
-          !/(from|into|update)\s+(?!public\.)[a-z_]+/i.test(fn.definition || ""),
-        "statement targets must be schema qualified"
+        unqualifiedTargets(fn.definition || "").length === 0,
+        JSON.stringify(unqualifiedTargets(fn.definition || ""))
       ) && ok;
   }
 
