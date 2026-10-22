@@ -197,10 +197,49 @@ Preview-деплой не влияет на production. Откат Preview = у�
 | Окружение | Привязка | Состояние |
 |---|---|---|
 | Production | `Shvachkomax/Ouction:main` → Vercel `oukcion` | Работает, данные видны, деплой не менялся |
-| Preview | Тот же Vercel-проект, ветка `feature/catalog-product-pages` | Push выполнен, деплой не создан - нет тестовой БД |
+| Preview | Тот же Vercel-проект, ветка `feature/catalog-product-pages` | Деплой `dpl_AxUarVXJDWS2bCHJiBvUqWkkYqe4` (SHA `ea310a0`) собран **без** Supabase-переменных |
 | Переменные Vercel | 4 общих, target = `production` | Значения прежние, Preview их не наследует |
+| Защита деплоя | `ssoProtection = all_except_custom_domains` | Preview открыт только после входа в Vercel |
 | Supabase CLI | `Invalid access token` | Требуется `supabase login --token <PAT>` |
 
-Production-данные, переменные и деплой не изменялись: изменён только список
-target у общих переменных Vercel (`preview` убран, `production` оставлен) -
-значения и production-деплой не тронуты.
+### 8.1. Проверено на действующем Preview
+
+`node scripts/preview-browser-check.mjs` - 17 проверок, все пройдены:
+
+- главная, каталог, кабинет - HTTP 200, русский интерфейс;
+- главная и мобильные `/`, `/catalog`, `/cabinet/artists` - без горизонтального
+  переполнения (0 px);
+- каталог показывает «Не удалось загрузить каталог», а не пустой список;
+- страница товара без БД - HTTP 200 с ошибкой, а не 404 (ошибка БД не
+  маскируется под «товара нет»);
+- неизвестный маршрут - HTTP 404 с русской страницей «Такой страницы нет»;
+- вход в кабинет без общего лимитера отклонён с сообщением
+  «не работает защита от подбора кода» - ослабленный обход не включается;
+- Preview не обращается ни к одному Supabase, в том числе к production;
+- ошибок в консоли браузера нет.
+
+Ожидаемо, что до подключения тестовой БД каталог показывает состояние
+ошибки: переменные Preview намеренно не содержат production-значений.
+
+### 8.2. Production не изменён
+
+Production-данные, значения переменных и деплой не менялись:
+
+- 3 production-деплоя остались прежними (`193c588f`, `5b13ac42`, `bc26a89f`);
+- у 4 общих переменных изменён только список target (`preview` убран,
+  `production` оставлен), значения не тронуты;
+- Preview-деплой, собранный до снятия наследования (`dpl_DV7uLLtD…`),
+  удалён;
+- production-сайт отвечает 200 и по-прежнему читает
+  `https://ekxqnzhylckbdptrooms.supabase.co`.
+
+### 8.3. Изменение настроек Vercel, о котором нужно знать
+
+Для автоматической проверки защищённого Preview командой `vercel curl`
+создан **bypass-токен защиты деплоя** (`automation-bypass`). Он позволяет
+обращаться к деплоям проекта из автоматизации по HTTP-заголовку
+`x-vercel-protection-bypass` и не открывает деплой публично. Токен хранится
+в Vercel как sensitive-переменная и не попадает в Git.
+
+Если владелец хочет удалить токен: Vercel → Project `oukcion` →
+Settings → Deployment Protection → Protection Bypass for Automation.
