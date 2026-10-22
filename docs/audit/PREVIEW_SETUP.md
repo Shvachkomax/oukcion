@@ -7,7 +7,7 @@ Production-проект `ekxqnzhylckbdptrooms` для Preview **не испол�
 
 | Пункт | Состояние |
 |---|---|
-| Ветка `feature/catalog-product-pages` в `Shvachkomax/Ouction` | SHA `b39b7a5` |
+| Ветка `feature/catalog-product-pages` в `Shvachkomax/Ouction` | SHA `6643781` |
 | Vercel-привязка | `Shvachkomax/Ouction` (`repoId 1320245903`), `productionBranch = main` |
 | Push feature-ветки создаёт только Preview | подтверждено: новые деплои имеют `gitSource.ref = feature/catalog-product-pages`, production-деплои не добавились |
 | Production-деплои | без изменений, 3 шт., SHA `193c588` / `5b13ac4` / `bc26a89` |
@@ -18,7 +18,7 @@ Production-проект `ekxqnzhylckbdptrooms` для Preview **не испол�
 | Runtime-проверки на PostgreSQL | 16 из 16 PASS |
 | Браузерные проверки Preview | 32 из 32 PASS (три прогона подряд) |
 | Проверки изоляции | 4 из 4 PASS |
-| Preview-деплой | `dpl_Ei8uCRPkxhR7XxuNwA5F6gGruzYP` (SHA `b39b7a5b`) |
+| Preview-деплой | `dpl_6ddx1PpVkw41DKaySxd6oHt5UUAW` (SHA `66437815`) |
 
 Подробности и ссылки: `docs/audit/PREVIEW_DEPLOYMENT_REPORT_2026-10-22.md`.
 
@@ -122,7 +122,7 @@ Bypass for Automation.
 ## 4. Проверки Preview
 
 ```bash
-export PREVIEW_URL=https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app
+export PREVIEW_URL=https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app
 export VERCEL_BYPASS=<bypass-токен из Vercel>
 export PREVIEW_DB_HOST=netevqurorkipymtvmwb.supabase.co
 export CABINET_CODE=<тестовый код кабинета>

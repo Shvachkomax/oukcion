@@ -1,11 +1,11 @@
 {
-  "preview": "https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app",
+  "preview": "https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app",
   "chunks": 8,
   "productionHits": 0,
   "testHits": 0,
   "productionFiles": [],
   "testFiles": [],
-  "at": "2026-10-22T01:20:24.916Z",
+  "at": "2026-10-22T01:29:11.356Z",
   "results": [
     {
       "name": "в HTML и JS-чангах нет production Supabase",

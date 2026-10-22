@@ -2,15 +2,15 @@
 
 Дата: 2026-10-22
 Ветка: `feature/catalog-product-pages`
-Локальный HEAD и remote HEAD: `b39b7a5`
+Локальный HEAD и remote HEAD: `6643781`
 Проект Vercel: `maxim-shvachko-s-projects/oukcion` (`prj_JLR1FscDMoq1OgvSCqT0aWnVm7oK`)
 
 ## 1. Итог
 
 | Пункт | Состояние |
 |---|---|
-| Preview-деплой | `dpl_Ei8uCRPkxhR7XxuNwA5F6gGruzYP`, SHA `b39b7a5b`, READY |
-| Preview URL | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app` |
+| Preview-деплой | `dpl_6ddx1PpVkw41DKaySxd6oHt5UUAW`, SHA `66437815`, READY |
+| Preview URL | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app` |
 | Доступ к Preview | только после входа в Vercel (`ssoProtection = all_except_custom_domains`) |
 | Тестовая Supabase | создана: `netevqurorkipymtvmwb` «Oukcion Preview Test», free, eu-central-1 |
 | Схема | применена и проверена (30 проверок), 24 из 24 PASS |
@@ -24,13 +24,13 @@
 
 | Что | Ссылка |
 |---|---|
-| Главная | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/` |
-| Каталог | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/catalog` |
-| Товар (опубликован) | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/products/test-sketch-42` |
-| Товар (вторая цена) | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/products/test-vase-blue` |
-| Персона | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/artists/test-anna-vetrova` |
-| Кабинет оператора | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/cabinet/artists` |
-| Страница 404 | `https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app/no-such-route` |
+| Главная | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/` |
+| Каталог | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/catalog` |
+| Товар (опубликован) | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/products/test-sketch-42` |
+| Товар (вторая цена) | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/products/test-vase-blue` |
+| Персона | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/artists/test-anna-vetrova` |
+| Кабинет оператора | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/cabinet/artists` |
+| Страница 404 | `https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app/no-such-route` |
 
 Все ссылки требуют входа в Vercel.
 
@@ -215,7 +215,7 @@ node scripts/seed-preview-data.mjs
 node scripts/preview-db-runtime-test.mjs
 
 # 3. браузерные проверки и изоляция
-export PREVIEW_URL=https://oukcion-5qh9ctjd7-maxim-shvachko-s-projects.vercel.app
+export PREVIEW_URL=https://oukcion-nha0si8jw-maxim-shvachko-s-projects.vercel.app
 export VERCEL_BYPASS=<bypass-токен из Vercel>
 export PREVIEW_DB_HOST=netevqurorkipymtvmwb.supabase.co
 export CABINET_CODE=2glD5p9oBgoNqXwdFpLO
