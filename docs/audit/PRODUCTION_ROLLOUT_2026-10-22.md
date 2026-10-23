@@ -8,8 +8,8 @@ production не попали.
 
 | Параметр | Значение |
 |---|---|
-| Ветка | `main` (merge `08cc3d8` + docs `66d8101`), исходная ветка `feature/catalog-product-pages` |
-| Production-деплой | `dpl_BLa6vwYKeAHrAhV4nEK1bqtDm99X` (`66d8101`) |
+| Ветка | `main` (`a33d626`), исходная ветка `feature/catalog-product-pages` |
+| Production-деплой | `dpl_6nJeSZgvsEKUGMMAwnozeMA9cwys` (`a33d626`) |
 | Адрес | `https://oukcion.vercel.app` |
 | Предыдущий production-деплой (точка отката) | `dpl_CaBhguUHad2aZN9wofzFWj8iXjyB` (`193c588`) |
 
@@ -28,13 +28,16 @@ production-деплой `193c588` был собран вручную (`vercel --
 поэтому `main` обновился fast-forward, без force-push.
 
 Проверенная история продублирована в `Shvachkomax/oukcion`:
-`193c588..66d8101` для `main` и новая ветка
+`193c588..a33d626` для `main` и новая ветка
 `feature/catalog-product-pages`. Это тоже fast-forward, без force-push.
+
+Коммиты, меняющие только документацию, создают дополнительный
+production-деплой того же кода.
 
 ### Сверка SHA
 
-Между проверенным Preview (`81323cc`) и выпуском (`66d8101`) изменились
-только два документа в `docs/audit/`. Файлов кода, конфигурации или
+Между проверенным Preview (`81323cc`) и выпуском (`a33d626`) изменились
+только документы в `docs/audit/`. Файлов кода, конфигурации или
 миграций в разнице нет.
 
 ## Изменения в production-БД
