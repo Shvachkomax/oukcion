@@ -3,6 +3,9 @@
 Окружение: Vercel Preview → отдельный тестовый Supabase-проект.
 Production-проект `ekxqnzhylckbdptrooms` для Preview **не используется**.
 
+Выкатка каталога в production описана отдельно:
+`docs/audit/PRODUCTION_ROLLOUT_2026-10-22.md`.
+
 ## 0. Состояние на 2026-10-22
 
 | Пункт | Состояние |
